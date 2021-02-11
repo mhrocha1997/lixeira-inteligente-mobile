@@ -15,18 +15,28 @@ export default function Register({navigation}){
 
 
     async function onSignUpPressed(e){
-        // Fazer validação dos campos
+        // ### TODO: Fazer validação dos campos
         
+        e.preventDefault();
+
         const data = {
-            nome,
-            email,
-            passowrd
+            nome: nome.value,
+            email: email.value,
+            password: password.value
         };
 
         try{
             const response = await api.post('/create/user',data,{'content-type': 'application/json'})
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: "Login" }],
+              });
         }catch(err){
-            alert(err);
+            navigation.reset({
+                index: 0,
+                routes: [{ name: "Register" }],
+              });
         }
 
 
@@ -48,13 +58,9 @@ export default function Register({navigation}){
                 label="Email"
                 returnKeyType="next"
                 value={email.value}
-                onChangeTExt={(text) => setEmail({value: text, error:''})}
+                onChangeText={(text) => setEmail({value: text, error:''})}
                 error={!!email.error}
                 errorText={email.error}
-                autoCapitalize="none"
-                autoCompleteType="email"
-                textContentType="emailAddress"
-                keyboardType="email-address"
             />
             <TextInput
                 label="Senha"

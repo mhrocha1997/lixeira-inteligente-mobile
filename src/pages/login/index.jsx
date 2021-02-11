@@ -16,18 +16,23 @@ export default function Login({ navigation }) {
 
   async function onLoginPressed() {
     // Fazer validação dos campos
-
+    const data = {
+      email: email.value,
+      password: password.value
+    };
+    console.log(data);
     try {
       const response = await api.post("/login/user", data, {
         "content-type": "application/json",
       });
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Register" }],
+      });
     } catch (err) {
-      alert("falha no login, tente novamente");
+      
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Register" }],
-    });
+    
   }
   return (
     <Background>
@@ -38,7 +43,7 @@ export default function Login({ navigation }) {
         label="Email"
         returnKeyType="next"
         value={email.value}
-        onChangeTExt={(text) => setEmail({ value: text, error: "" })}
+        onChangeText={(text) => setEmail({ value: text, error: "" })}
         error={!!email.error}
         errorText={email.error}
         autoCapitalize="none"

@@ -3360,6 +3360,14 @@ find-up@~5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
+follow-redirects@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-0.0.7.tgz#34b90bab2a911aa347571da90f22bd36ecd8a919"
+  integrity sha1-NLkLqyqRGqNHVx2pDyK9NuzYqRk=
+  dependencies:
+    debug "^2.2.0"
+    stream-consume "^0.1.0"
+
 follow-redirects@^1.10.0:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.2.tgz#dd73c8effc12728ba5cf4259d760ea5fb83e3147"
@@ -5408,6 +5416,13 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-native-axios@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/react-native-axios/-/react-native-axios-0.17.1.tgz#44292950aa07ceee2e4bd349106ff773bef81f8f"
+  integrity sha1-RCkpUKoHzu4uS9NJEG/3c774H48=
+  dependencies:
+    follow-redirects "0.0.7"
+
 react-native-feather@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-native-feather/-/react-native-feather-1.0.2.tgz#9b02a32f313088084da5ebb0130659fa582edf43"
@@ -6048,6 +6063,11 @@ stream-buffers@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/stream-buffers/-/stream-buffers-2.2.0.tgz#91d5f5130d1cef96dcfa7f726945188741d09ee4"
   integrity sha1-kdX1Ew0c75bc+n9yaUUYh0HQnuQ=
+
+stream-consume@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/stream-consume/-/stream-consume-0.1.1.tgz#d3bdb598c2bd0ae82b8cac7ac50b1107a7996c48"
+  integrity sha512-tNa3hzgkjEP7XbCkbRXe1jpg+ievoa0O4SCFlMOYEscGSS4JJsckGL8swUyAa/ApGU3Ae4t6Honor4HhL+tRyg==
 
 strict-uri-encode@^2.0.0:
   version "2.0.0"
