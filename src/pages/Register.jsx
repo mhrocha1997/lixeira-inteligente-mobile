@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text,StyleSheet, TouchableOpacity} from 'react-native';
-import Logo from '../../components/Logo';
-import Background from '../../components/Background';
-import Header from '../../components/header';
-import TextInput from '../../components/TextInput';
-import Button from '../../components/Button';
-import api from '../../services/api';
+import Logo from '../components/Logo';
+import Background from '../components/Background';
+import Header from '../components/header';
+import TextInput from '../components/TextInput';
+import Button from '../components/Button';
+import api from '../services/api';
 
 
 export default function Register({navigation}){

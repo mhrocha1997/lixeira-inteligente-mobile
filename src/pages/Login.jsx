@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-import Logo from "../../components/Logo";
-import Background from "../../components/Background";
-import Header from "../../components/header";
-import TextInput from "../../components/TextInput";
-import BackButton from "../../components/BackButton";
-import Button from '../../components/Button';
+import Logo from "../components/Logo";
+import Background from "../components/Background";
+import Header from "../components/header";
+import TextInput from "../components/TextInput";
+import BackButton from "../components/BackButton";
+import Button from '../components/Button';
 
-import api from "../../services/api";
+import api from "../services/api";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
   async function onLoginPressed() {
-    // Fazer validação dos campos
     const data = {
       email: email.value,
       password: password.value
     };
-    console.log(data);
+
+    navigation.navigate('Dashboard');
+    
     try {
       const response = await api.post("/login/user", data, {
         "content-type": "application/json",
@@ -30,7 +31,7 @@ export default function Login({ navigation }) {
         routes: [{ name: "Register" }],
       });
     } catch (err) {
-      
+      console.log(err);
     }
     
   }
