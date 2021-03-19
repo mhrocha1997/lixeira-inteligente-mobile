@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-
+import { View, Text, StyleSheet, TouchableOpacity, Async } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage'
 import Logo from "../components/Logo";
 import Background from "../components/Background";
 import Header from "../components/header";
@@ -14,22 +14,32 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
+  _storeData = async () => {
+    try{
+      await AsyncStorage.setItem("token", token);
+      console.log("Armazenou o token")
+    }catch{
+      console.log("Erro ao armazenar o token");
+    }
+  }
+
   async function onLoginPressed() {
     const data = {
       email: email.value,
       password: password.value
     };
-
-    navigation.navigate('Dashboard');
     
     try {
+      console.log("Tentando logar ..............................")
       const response = await api.post("/login/user", data, {
         "content-type": "application/json",
       });
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Register" }],
-      });
+      token = response.data.data.token;
+
+      _storeData();
+      
+      navigation.navigate('Dashboard');
+      
     } catch (err) {
       console.log(err);
     }
@@ -39,7 +49,7 @@ export default function Login({ navigation }) {
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header> Bem vindo de volta!</Header>
+      <Header> Bem vindo!</Header>
       <TextInput
         label="Email"
         returnKeyType="next"
