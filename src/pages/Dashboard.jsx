@@ -5,8 +5,8 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 
 
-import Catalogo from '../pages/Catalogo';
-import Produtos from '../pages/Produtos';
+import Catalog from '../pages/Catalog';
+import MyDiscards from './MyDiscards';
 
 
 export default function Dashboard({ navigation}){
@@ -15,8 +15,8 @@ export default function Dashboard({ navigation}){
     return(
         <NavigationContainer independent={true}>
             <Drawer.Navigator initialRouteName="Home">
-                <Drawer.Screen name="Home" component={Catalogo} />
-                <Drawer.Screen name="Produtos" component={Produtos} />
+                <Drawer.Screen name="Home" component={Catalog} />
+                <Drawer.Screen name="Meus descartes" component={MyDiscards} />
             </Drawer.Navigator>
         </NavigationContainer>
     );

@@ -6,7 +6,7 @@ import Header from '../components/header';
 import api from '../services/api';
 import { FlatList } from 'react-native-gesture-handler';
 
-export default function Catalogo({navigation}){
+export default function Catalog({navigation}){
   const [products, setProducts] = useState([]);
 
   
