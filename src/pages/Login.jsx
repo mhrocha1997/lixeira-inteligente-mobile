@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Async } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage'
 import Logo from "../components/Logo";
@@ -22,6 +22,18 @@ export default function Login({ navigation }) {
       console.log("Erro ao armazenar o token");
     }
   }
+  // useEffect(() => {
+  //   try {
+  //     console.log("lendo token...")
+  //     const token =  AsyncStorage.getItem('token')
+  //     if(token !== null) {
+  //       console.log("Token lido");
+  //       navigation.navigate('Dashboard');
+  //     }
+  //   } catch(e) {
+  //     console.log("Erro ao ler o token");
+  //   }
+  // },[])
 
   async function onLoginPressed() {
     const data = {
