@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, SafeAreaView, Text, Button } from 'react-native';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import AsyncStorage from '@react-native-community/async-storage'
 
 import api from '../services/api';
 
@@ -21,31 +22,40 @@ export default function ReadCodebar({navigation}){
           })();
     },[])
 
-    // Pegando token
-    useEffect(() => {
-          try {
-            console.log("lendo token...")
-            const token =  AsyncStorage.getItem('token')
+    async function getToken(){
+        try {
+            console.log("lendo token...");
+            const token = await AsyncStorage.getItem('token');
             if(token !== null) {
-                // #TODO  Verificar se o token já expirou
-                // Se já expirou, logar novamente,
-                // caso contrário, prosseguir
-            }
-          } catch(e) {
-            console.log("Erro ao ler o token");
-          }
-        },[])
+                const response = await api.get('/token', {'headers': {"Authorization": token}});
+    
+                if(response.status != 200){
+                    navigation.navigate("Login");
+                }else{
+                    return token;
+                } 
+    
+            }   
+        } catch(e) {
+        console.log("Erro ao ler o token", e);
+        }
+    }
+        
+    
 
-    const handleBarCodeScanned = ({ data }) => {
+    const handleBarCodeScanned = async ({ data }) => {
         console.log("Leu o código");
+
         setScanned(true);
         
-        const url = 'inset/item/inventory';
-        
+        const url = '/insert/item/inventory';
+        console.log(data);
         let body = {
-            "id_item": data,
-            "id_bin": 12,
+            "id_item": `${data}`,
+            "id_bin": '1',
         }
+
+        const token = await getToken();
         
         header = {'headers':
         {"Content-Type": "application/json",
@@ -53,10 +63,13 @@ export default function ReadCodebar({navigation}){
         }
 
         const response = await api.post(url, body, header);
-        
-        response.status == 200 
-            ? navigation.navigate("Meus descartes")
-            : setSuccess(false);
+
+        if(response.status == 200) {
+            setSuccess(true)
+            navigation.navigate("Meus descartes")
+        }else{
+            setSuccess(false)
+        }
         
     }
 

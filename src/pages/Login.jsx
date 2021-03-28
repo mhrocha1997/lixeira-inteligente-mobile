@@ -14,7 +14,7 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
-  _storeData = async () => {
+  _storeData = async (token) => {
     try{
       await AsyncStorage.setItem("token", token);
       console.log("Armazenou o token")
@@ -22,18 +22,27 @@ export default function Login({ navigation }) {
       console.log("Erro ao armazenar o token");
     }
   }
-  // useEffect(() => {
-  //   try {
-  //     console.log("lendo token...")
-  //     const token =  AsyncStorage.getItem('token')
-  //     if(token !== null) {
-  //       console.log("Token lido");
-  //       navigation.navigate('Dashboard');
-  //     }
-  //   } catch(e) {
-  //     console.log("Erro ao ler o token");
-  //   }
-  // },[])
+  
+  useEffect( () => {
+    async function verifyToken(){
+        try {
+            console.log("lendo token...");
+            const token =  await AsyncStorage.getItem('token');
+            console.log("token: ", token)
+            if(token !== null) {
+              console.log("Aqui")
+              const response = await api.get('/token', {'headers':{"Authorization": token}});
+              console.log(response.status);
+              if(response.status === 200) navigation.navigate("Dashboard");
+  
+            }   
+          } catch(e) {
+            console.log("Erro ao ler o token: ", e);
+          }
+    }
+    
+    verifyToken();
+  },[])
 
   async function onLoginPressed() {
     const data = {
@@ -46,9 +55,13 @@ export default function Login({ navigation }) {
       const response = await api.post("/login/user", data, {
         "content-type": "application/json",
       });
-      token = response.data.data.token;
+      console.log(response);
 
-      _storeData();
+      const token = response.data.data.token;
+      
+      console.log(token)
+
+      _storeData(token);
       
       navigation.navigate('Dashboard');
       

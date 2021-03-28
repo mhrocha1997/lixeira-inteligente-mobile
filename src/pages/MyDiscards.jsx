@@ -29,7 +29,7 @@ export default function MyDiscards({navigation}){
   async function getProducts(){
     const token = await getToken();
     console.log("GET products",token);
-    const response = await api.get('/get/item/full', {'headers':{"Content-Type": "application/json", "Authorization": token}});
+    const response = await api.get('/get/user/inventory', {'headers':{"Authorization": token}});
     setProducts(response.data.data);
   }
   
@@ -60,8 +60,9 @@ export default function MyDiscards({navigation}){
                     renderItem={({item}) => (
                     <Product 
                       image={item.img_base64}
-                      title={item.nome}
+                      title={item.name}
                       description={item.material}
+                      points={item.points}
                     />
                   )}
                 />

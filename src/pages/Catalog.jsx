@@ -46,8 +46,9 @@ export default function Catalog({navigation}){
                     renderItem={({item}) => (
                     <Product 
                       image={item.img_base64}
-                      title={item.nome}
+                      title={item.name}
                       description={item.material}
+                      points={item.points}
                     />
                   )}
                 />

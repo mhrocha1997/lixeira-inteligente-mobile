@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, TouchableHighlight, Image, Linking,StyleSheet } from 'react-native';
 
-export default function Product({image, description, title }) {
+export default function Product({image, description, title, points }) {
     let base64Image = `data:image/png;base64,${image}`;
     return (
         <View style={styles.centeredView}>
             <View style= {styles.cardView}>
 
-                <Image source={{uri: base64Image}} style={styles.productImage}/>
-                <View>
+                <View style={styles.infoView}>
                     <Text style={styles.titleText}>{title}</Text>
-                    <Text style={styles.descriptionText}>{description}</Text>
-                    <Text style={styles.pointsText}>10 pontos</Text>
+                    <Text style={styles.descriptionText}>Material: {description}</Text>
+                    <Text style={styles.pointsText}>{points} pontos</Text>
                 </View>
+                <Image source={{uri: base64Image}} style={styles.productImage}/>
+
             </View>
         </View>
     )
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     
     cardView: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         margin: 15,
         backgroundColor: "white",
         borderRadius: 15,
@@ -41,13 +42,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        width: '94%',
+        width: '80%',
         minHeight: 150
     },
-    
+    infoView: {
+        flex: 1,
+    },
     productImage: {
-        width: '50%',
-        height: '50%'
+        width: null,
+        height: null,
+        flex:1,
+        resizeMode: 'contain'
     },
 
     descriptionText: {
@@ -57,8 +62,8 @@ const styles = StyleSheet.create({
     titleText: {
         color: "black",
         fontWeight: "bold",
-        fontSize: 16,
-        margin: 5
+        fontSize: 18,
+        marginBottom: 5
     },
 
     pointsText: {
