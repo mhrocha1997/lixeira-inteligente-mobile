@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Async } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage'
 import Logo from "../components/Logo";
@@ -9,11 +9,14 @@ import BackButton from "../components/BackButton";
 import Button from '../components/Button';
 
 import api from "../services/api";
+import UserContext from "../contexts/UserContext";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
+  const {handleLogin} = useContext(UserContext);
+  
   _storeData = async (token) => {
     try{
       await AsyncStorage.setItem("token", token);
@@ -23,27 +26,6 @@ export default function Login({ navigation }) {
     }
   }
   
-  useEffect( () => {
-    async function verifyToken(){
-        try {
-            console.log("lendo token...");
-            const token =  await AsyncStorage.getItem('token');
-            console.log("token: ", token)
-            if(token !== null) {
-              console.log("Aqui")
-              const response = await api.get('/token', {'headers':{"Authorization": token}});
-              console.log(response.status);
-              if(response.status === 200) navigation.navigate("Dashboard");
-  
-            }   
-          } catch(e) {
-            console.log("Erro ao ler o token: ", e);
-          }
-    }
-    
-    verifyToken();
-  },[])
-
   async function onLoginPressed() {
     const data = {
       email: email.value,
@@ -58,12 +40,13 @@ export default function Login({ navigation }) {
       console.log(response);
 
       const token = response.data.data.token;
-      
-      console.log(token)
 
-      _storeData(token);
+      if(token != null){
+        _storeData(token);
+        handleLogin(token);
+      }
       
-      navigation.navigate('Dashboard');
+      
       
     } catch (err) {
       console.log(err);
