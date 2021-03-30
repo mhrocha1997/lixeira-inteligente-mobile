@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, Image, Linking,StyleSheet } from 'react-native';
 
-export default function Product({image, description, title, points }) {
+export default function Product({image, description, title, points, quantity }) {
     let base64Image = `data:image/png;base64,${image}`;
     return (
         <View style={styles.centeredView}>
@@ -10,6 +10,11 @@ export default function Product({image, description, title, points }) {
                 <View style={styles.infoView}>
                     <Text style={styles.titleText}>{title}</Text>
                     <Text style={styles.descriptionText}>Material: {description}</Text>
+                    {quantity
+                        ? <Text style={styles.descriptionText}>Quantidade: {quantity}</Text>
+                        : undefined 
+
+                    }
                     <Text style={styles.pointsText}>{points} pontos</Text>
                 </View>
                 <Image source={{uri: base64Image}} style={styles.productImage}/>

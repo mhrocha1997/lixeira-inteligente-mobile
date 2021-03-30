@@ -63,6 +63,7 @@ export default function MyDiscards({navigation}){
                       title={item.name}
                       description={item.material}
                       points={item.points}
+                      quantity={item.quantity}
                     />
                   )}
                 />
@@ -77,7 +78,7 @@ export default function MyDiscards({navigation}){
               text
               floatingIcon={
                 <Icon 
-                  name="md-trash-outline"
+                  name="add-outline"
                   size={30}
                   color="white"
                 />
