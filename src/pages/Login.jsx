@@ -15,7 +15,7 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
-  const {handleLogin} = useContext(UserContext);
+  const {state, dispatch} = useContext(UserContext);
   
   _storeData = async (token) => {
     try{
@@ -43,7 +43,10 @@ export default function Login({ navigation }) {
 
       if(token != null){
         _storeData(token);
-        handleLogin(token);
+        dispatch({
+          type: 'login',
+          payload: token
+        })
       }
       
       

@@ -1,15 +1,35 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useEffect, useState, useReducer} from 'react';
 
 const UserContext = createContext({})
 
+const actions = {
+    login(state,action){
+        setToken(action.token);
+        setIsSigned(true);
+        return {
+            ...state,
+            token,
+            isSigned
+        }
+    }
+}
+
 export const UserProvider = ({children}) =>{
     const [token, setToken] = useState();
-    const [isSigned, setIsSigned] = useState();
+    const [isSigned, setIsSigned] = useState(false);
 
-    function handleLogin(token){
-        setToken(token);
-        setIsSigned(true);
+    const initialState = {
+        token,
+        isSigned
     }
+
+    const [state, dispatch] = useReducer(reducer, initialState)
+
+    function reducer(state, action){
+        const fn = actions[action.type]
+        return fn ?  fn(state,action) : state;
+    }
+
 
     useEffect( () => {
 
@@ -39,11 +59,7 @@ export const UserProvider = ({children}) =>{
 
     return(
         <UserContext.Provider
-            value={
-                token,
-                isSigned,
-                handleLogin
-            }
+            value={{state, dispatch}}
         >
             {children}
         </UserContext.Provider>
