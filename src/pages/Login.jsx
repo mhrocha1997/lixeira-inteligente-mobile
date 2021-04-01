@@ -15,7 +15,7 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
-  const {state, dispatch} = useContext(UserContext);
+  const {dispatch} = useContext(UserContext);
   
   _storeData = async (token) => {
     try{
@@ -37,16 +37,18 @@ export default function Login({ navigation }) {
       const response = await api.post("/login/user", data, {
         "content-type": "application/json",
       });
-      console.log(response);
 
       const token = response.data.data.token;
-
+      
+      console.log("Logou e pegou o token", token)
       if(token != null){
         _storeData(token);
+        console.log("Despachando o token...")
         dispatch({
           type: 'login',
           payload: token
         })
+        
       }
       
       

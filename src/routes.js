@@ -26,7 +26,8 @@ export default function Routes(){
     const Drawer = createDrawerNavigator();
 
     const {isSigned} = useContext(UserContext);
-
+    console.log("Está logado:", isSigned);
+    
     return(
 
         <UserProvider>
