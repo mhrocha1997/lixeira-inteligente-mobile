@@ -20,8 +20,9 @@ export const UserProvider = ({children}) =>{
                     setToken(token);
                     const response = await api.get('/token', {'headers': {"Authorization": token}});
                     if(response.status==200){
-                        console.log("É verdade")
+                        console.log("Token é válido!")
                         setIsSigned(true)
+                        console.log("isSigned: ", isSigned)
                         
                     }else{
                         setIsSigned(false)
@@ -36,26 +37,15 @@ export const UserProvider = ({children}) =>{
         verifyToken();
       },[])
 
-    const actions = {
-        login(state,action){
-            console.log("state: ",state);
-            setToken(action.payload);
-            setIsSigned(true);
-            return {
-                ...state,
-                token,
-                isSigned
-            }
+    function handleLogin(token){
+        setToken(token);
+        setIsSigned(true);
         }
-    }
 
     const initialState = {
         token,
         isSigned
     }
-
-
-    const [state, dispatch] = useReducer(reducer, initialState)
 
     function reducer(state, action){
         const fn = actions[action.type]
@@ -63,11 +53,9 @@ export const UserProvider = ({children}) =>{
     }
 
 
-    
-
     return(
         <UserContext.Provider
-            value={{state, dispatch}}
+            value={{isSigned,token}}
         >
             {children}
         </UserContext.Provider>
