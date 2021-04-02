@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
 
 
@@ -6,7 +6,7 @@ import { NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Feather';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -16,19 +16,28 @@ import MyDiscards from './pages/MyDiscards';
 import ReadBarcode from './pages/ReadBarcode';
 
 import UserContext from './contexts/UserContext';
+import api from './services/api';
 
 const width = Dimensions.get("screen").width;
 
 
 export default function Routes(){
+    const [points, setPoints] = useState(0);
 
     const AppStack = createStackNavigator();
     const Drawer = createDrawerNavigator();
 
     const {isSigned, token} = useContext(UserContext);
     
-    console.log("Está logado:", isSigned);
+    useEffect(() => {
+        async function getPoints(){
+            const response =  await api.get('/get/user', {'headers': {'Authorization': token}});
+            setPoints(response.data.data[0].points);
+        }
+        getPoints();
+    },[])
 
+    console.log("Está logado:", isSigned);
 
     return(
             <NavigationContainer>
@@ -44,7 +53,7 @@ export default function Routes(){
                             headerShown: true,
                             headerLeft: () => null,
                             headerRight: () => 
-                            <Text style={styles.header}> 600 xp</Text>,
+                            <Text style={styles.header}> {points} xp</Text>,
                             headerTitle: () => null,
                             headerStyle: styles.headerContainer
                         
@@ -61,7 +70,9 @@ export default function Routes(){
                                 drawerIcon: () => 
                                 <Icon 
                                     name='list' 
-                                    size={30}
+                                    size={28}
+                                    color='white'
+                                    style={styles.icon}
                                 />,
                                 }}
                             />
@@ -73,8 +84,10 @@ export default function Routes(){
                                 // drawerLabel: () => null,
                                 drawerIcon: () =>
                                 <Icon 
-                                    name='trash-outline' 
-                                    size={30}
+                                    name='trash-2' 
+                                    size={28}
+                                    color='white'
+                                    style={styles.icon}
                                 />,
                                 }}
                             />
@@ -109,10 +122,14 @@ const styles = StyleSheet.create({
     header: {
       margin: 5,
       fontSize: 18,
+      color: 'white'
     },
     headerContainer: {
       backgroundColor: '#31ce8c',
       height: 60,
       justifyContent: 'center'
+    },
+    icon:{
+        opacity: 0.8
     }
   })
