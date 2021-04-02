@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, Text, Dimensions} from 'react-native';
 
-
 import { NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
