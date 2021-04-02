@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {StyleSheet, Text} from 'react-native';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -12,8 +12,12 @@ import MyDiscards from './MyDiscards';
 import ReadBarcode from './ReadBarcode';
 import AsyncStorage from '@react-native-community/async-storage'
 
+import api from '../services/api';
+
 export default function Dashboard({ navigation }){
     const Drawer = createDrawerNavigator();
+    const [points, setPoints] = useState();
+    const [token, setToken] = useState();
 
     // Pegando token
     useEffect( () => {
@@ -21,11 +25,11 @@ export default function Dashboard({ navigation }){
         async function verifyToken(){
             try {
                 console.log("lendo token...");
-                const token =  AsyncStorage.getItem('token');
+                const token =  await AsyncStorage.getItem('token');
                 if(token !== null) {
                   const response = await api.get('/token', {'headers': {"Authorization": token}});
       
-                  if(response.status != 200) navigation.navigate("Login");
+                  if(response.status == 200) setToken(token)
       
                 }   
               } catch(e) {
@@ -34,6 +38,19 @@ export default function Dashboard({ navigation }){
         }
         
         verifyToken();
+      },[])
+
+
+      useEffect(() => {
+        async function getPoints(){
+          const response = await api.get('/get/user', {'headers': {"Authorization": token}});
+          const points  = response.data.data[0].points;
+
+          console.log(points)
+          setPoints(points)
+
+        }
+        getPoints();
       },[])
 
     
@@ -50,7 +67,7 @@ export default function Dashboard({ navigation }){
                 headerShown: true,
                 headerLeft: () => null,
                 headerRight: () => 
-                  <Text style={styles.header}> 600 xp</Text>,
+                  <Text style={styles.header}> {points} xp</Text>,
                 headerTitle: () => null,
                 headerStyle: styles.headerContainer
                 
