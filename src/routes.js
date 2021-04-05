@@ -3,7 +3,7 @@ import {StyleSheet, Text, Dimensions} from 'react-native';
 
 import { NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -13,6 +13,8 @@ import Register from './pages/Register';
 import Catalog from './pages/Catalog';
 import MyDiscards from './pages/MyDiscards';
 import ReadBarcode from './pages/ReadBarcode';
+import Profile from './pages/Profile';
+import Location from './pages/Location';
 
 import UserContext from './contexts/UserContext';
 import api from './services/api';
@@ -24,7 +26,7 @@ export default function Routes(){
     const [points, setPoints] = useState(0);
 
     const AppStack = createStackNavigator();
-    const Drawer = createDrawerNavigator();
+    const Tab = createBottomTabNavigator();
 
     const {isSigned, token} = useContext(UserContext);
     
@@ -41,65 +43,88 @@ export default function Routes(){
     return(
             <NavigationContainer>
                 { isSigned
-                    ?( <Drawer.Navigator 
+                    ?( <Tab.Navigator 
                         initialRouteName="Meus descartes" 
-                        drawerContentOptions={{
+                        tabBarOptions={{
                             activeTintColor: 'white', 
-                            contentContainerStyle: styles.drawer,
+                            style: styles.drawer,
+
                             }}
                         hideStatusBar={true}
-                        screenOptions={{
-                            headerShown: true,
-                            headerLeft: () => null,
-                            headerRight: () => 
-                            <Text style={styles.header}> {points} xp</Text>,
-                            headerTitle: () => null,
-                            headerStyle: styles.headerContainer
-                        
-                        }}
-                        drawerStyle={{
-                            width: width*0.65
-                        }}
+
                         >
-                            <Drawer.Screen 
+                            <Tab.Screen 
                             name="Catálogo" 
                             component={Catalog}
                             options={{
-                                // drawerLabel: () => null,
-                                drawerIcon: () => 
+                                tabBarLabel: () => null,
+                                tabBarIcon: () => 
                                 <Icon 
                                     name='list' 
-                                    size={28}
+                                    size={30}
                                     color='white'
                                     style={styles.icon}
                                 />,
                                 }}
                             />
 
-                            <Drawer.Screen 
+                            <Tab.Screen 
                             name="Meus descartes" 
                             component={MyDiscards}
                             options={{
-                                // drawerLabel: () => null,
-                                drawerIcon: () =>
+                                tabBarLabel: () => null,
+                                tabBarIcon: () =>
                                 <Icon 
                                     name='trash-2' 
-                                    size={28}
+                                    size={30}
                                     color='white'
                                     style={styles.icon}
                                 />,
                                 }}
                             />
-                            <Drawer.Screen 
+                            <Tab.Screen 
                             name="Novo Descarte" 
                             component={ReadBarcode}
                             options={{
-                                drawerLabel: () => null,
-                                title: undefined,
-                                drawerIcon: () => null
+                                tabBarLabel: () => null,
+                                tabBarIcon: () => 
+                                <Icon
+                                    name='plus-circle'
+                                    size={30}
+                                    color='white'
+                                    style={styles.icon}
+                                />
                                 }}
                             />
-                        </Drawer.Navigator>
+                            <Tab.Screen
+                                name="Perfil"
+                                component={Profile}
+                                options={{
+                                    tabBarLabel: () => null,
+                                    tabBarIcon: () => 
+                                        <Icon
+                                            name='user'
+                                            size={30}
+                                            color='white'
+                                            style={styles.icon}
+                                        />
+                                }}
+                            />
+                            <Tab.Screen
+                                name="Localização"
+                                component={Location}
+                                options={{
+                                    tabBarLabel: () => null,
+                                    tabBarIcon: () => 
+                                        <Icon
+                                            name='map-pin'
+                                            size={30}
+                                            color='white'
+                                            style={styles.icon}
+                                        />
+                                }}
+                            />
+                        </Tab.Navigator>
                     ) : (
                         <AppStack.Navigator screenOptions={{headerShown: false}}>
                             <AppStack.Screen name ="Login" component = {Login} />
@@ -116,7 +141,7 @@ const styles = StyleSheet.create({
       // alignItems: 'center',
       backgroundColor: '#31ce8c',
     //   justifyContent: 'center',
-      flex: 1,
+    //   flex: 1,
     },
     header: {
       margin: 5,
