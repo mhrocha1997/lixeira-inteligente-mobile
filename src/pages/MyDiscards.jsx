@@ -74,23 +74,6 @@ export default function MyDiscards({navigation}){
               }
               
             </View>
-            <FloatingAction
-              text
-              floatingIcon={
-                <Icon 
-                  name="add-outline"
-                  size={30}
-                  color="white"
-                />
-              }
-              color='#31ce8c'
-              actions={actions}
-              onPressItem={name => {
-                console.log(name);
-                navigation.navigate("Novo Descarte")
-              }}
-              shadow={{ shadowOpacity: 0.35, shadowOffset: { width: 1, height: 6 }, shadowColor: "#000000", shadowRadius: 5 }}
-            />
         </SafeAreaView>
 
     );
