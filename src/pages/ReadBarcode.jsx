@@ -1,55 +1,33 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { View, StyleSheet, SafeAreaView, Text, Button } from 'react-native';
 
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import AsyncStorage from '@react-native-community/async-storage'
 
 import api from '../services/api';
+import UserContext from '../contexts/UserContext';
 
 export default function ReadCodebar({navigation}){
     const [hasPermission, setHasPermission] = useState(true);
     const [scanned, setScanned] = useState(false);
     const [success, setSuccess] = useState(true);
+    const { token } = useContext(UserContext);
 
     // Checando permissão da câmera
     useEffect(() => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
-            console.log("Status da permissão: ", status);
             if(status == 'granted'){
                 setHasPermission(status);
             }
           })();
     },[])
 
-    async function getToken(){
-        try {
-            console.log("lendo token...");
-            const token = await AsyncStorage.getItem('token');
-            if(token !== null) {
-                const response = await api.get('/token', {'headers': {"Authorization": token}});
-    
-                if(response.status != 200){
-                    navigation.navigate("Login");
-                }else{
-                    return token;
-                } 
-    
-            }   
-        } catch(e) {
-        console.log("Erro ao ler o token", e);
-        }
-    }
-        
-    
-
     const handleBarCodeScanned = async ({ data }) => {
-        console.log("Leu o código");
 
         setScanned(true);
         
         const url = '/insert/item/inventory';
-        console.log(data);
         let body = {
             "id_item": `${data}`,
             "id_bin": '1',
@@ -97,10 +75,6 @@ export default function ReadCodebar({navigation}){
                 : undefined
             }
 
-            {success
-                ? <Text> Produto ainda não disponível</Text>
-                : undefined
-            }
         </SafeAreaView>
         
     );

@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     cardView: {
         flexDirection: 'row',
         justifyContent: 'center',
-        margin: 15,
         backgroundColor: "white",
         borderRadius: 15,
         padding: 15,
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
         color: "#31ce8c",
         fontWeight: "bold",
         fontSize: 16,
-        margin: 5
+        marginBottom: 5
     },
 
 
