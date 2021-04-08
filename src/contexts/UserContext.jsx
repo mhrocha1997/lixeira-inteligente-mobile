@@ -8,32 +8,37 @@ const UserContext = createContext({})
 export const UserProvider = ({children}) =>{
     const [token, setToken] = useState();
     const [isSigned, setIsSigned] = useState(false);
+    const [points, setPoints] = useState(0);
+
+
+    useEffect(() => {
+        async function getPoints(){
+            const response =  await api.get('/get/user', {'headers': {'Authorization': token}});
+            setPoints(response.data.data[0].points);
+        }
+        getPoints();
+    },[])
 
     useEffect( () => {
 
         async function verifyToken(){
             try {
-                console.log("lendo token...");
                 const token =  await AsyncStorage.getItem('token');
-                console.log("Token: ", token)
                 if(token !== null) {
                     setToken(token);
                     const response = await api.get('/token', {'headers': {"Authorization": token}});
+                    console.log(response)
                     if(response.status==200){
-                        console.log("Token é válido!")
+
                         setIsSigned(true)
-                        console.log("isSigned: ", isSigned)
-                        
                     }else{
                         setIsSigned(false)
                     }
-        
                 }   
               } catch(e) {
                 console.log("Erro ao ler o token", e);
               }
         }
-        
         verifyToken();
       },[])
 
@@ -55,7 +60,7 @@ export const UserProvider = ({children}) =>{
 
     return(
         <UserContext.Provider
-            value={{isSigned,token}}
+            value={{isSigned,token, handleLogin}}
         >
             {children}
         </UserContext.Provider>

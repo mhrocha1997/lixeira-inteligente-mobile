@@ -1,35 +1,20 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, SafeAreaView } from 'react-native';
 import Product from '../components/Product';    
 import Header from '../components/header';
 import api from '../services/api';
 import { FlatList } from 'react-native-gesture-handler';
+import UserContext from '../contexts/UserContext';
 
 export default function Catalog({navigation}){
   const [products, setProducts] = useState([]);
 
-  
-  const getToken = async () => {
-    try {
-      console.log("lendo token...")
-      const token = await AsyncStorage.getItem('token')
-      if(token !== null) {
-        console.log("Token lido");
-        return token;
-      }
-    } catch(e) {
-      console.log("Erro ao ler o token");
-    }
-  }
+  const { token } = useContext(UserContext);
 
   async function getProducts(){
-    const token = await getToken();
-    console.log("GET products",token);
     const response = await api.get('/get/item/full', {'headers':{"Content-Type": "application/json", "Authorization": token}});
     setProducts(response.data.data);
   }
-  
   
     useEffect(() => {
       getProducts();

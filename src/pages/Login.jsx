@@ -15,12 +15,11 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
-  const {dispatch} = useContext(UserContext);
+  const { handleLogin } = useContext(UserContext);
   
-  _storeData = async (token) => {
+  const _storeData = async (token) => {
     try{
       await AsyncStorage.setItem("token", token);
-      console.log("Armazenou o token")
     }catch{
       console.log("Erro ao armazenar o token");
     }
@@ -33,22 +32,15 @@ export default function Login({ navigation }) {
     };
     
     try {
-      console.log("Tentando logar ..............................")
       const response = await api.post("/login/user", data, {
         "content-type": "application/json",
       });
 
       const token = response.data.data.token;
-      
-      console.log("Logou e pegou o token", token)
+
       if(token != null){
         _storeData(token);
-        console.log("Despachando o token...")
-        dispatch({
-          type: 'login',
-          payload: token
-        })
-        
+        handleLogin(token)
       }
       
       
