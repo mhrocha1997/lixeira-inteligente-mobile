@@ -36,10 +36,9 @@ export default function ReadCodebar({navigation}){
         const response = await api.post(url, body, header);
 
         if(response.status == 200) {
-            setSuccess(true)
             navigation.navigate("Perfil")
         }else{
-            setSuccess(false)
+            console.log("Erro na leitura")
         }
         
     }
