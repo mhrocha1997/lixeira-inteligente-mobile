@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, Image, Linking,StyleSheet } from 'react-native';
+import { View, Text, Image,StyleSheet } from 'react-native';
 
 export default function Product({image, description, title, points, quantity }) {
     let base64Image = `data:image/png;base64,${image}`;

@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, SafeAreaView } from 'react-native';
 import Product from '../components/Product';    
 import Header from '../components/header';
 import api from '../services/api';
 import { FlatList } from 'react-native-gesture-handler';
+import UserContext from '../contexts/UserContext';
 
 export default function Catalog({navigation}){
   const [products, setProducts] = useState([]);

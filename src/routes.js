@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Text, Dimensions} from 'react-native';
+import React, {useContext} from 'react';
+import {StyleSheet} from 'react-native';
 
 import { NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -11,10 +11,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 
 import Catalog from './pages/Catalog';
-import MyDiscards from './pages/MyDiscards';
 import ReadBarcode from './pages/ReadBarcode';
 import Profile from './pages/Profile';
-import Location from './pages/Location';
 
 import UserContext from './contexts/UserContext';
 
@@ -30,13 +28,14 @@ export default function Routes(){
             <NavigationContainer>
                 { isSigned
                     ?( <Tab.Navigator 
-                        initialRouteName="Meus descartes" 
+                        initialRouteName="Perfil" 
                         tabBarOptions={{
-                            activeTintColor: 'white', 
-                            style: styles.drawer,
+                            activeTintColor: 'red',
+                            style: styles.tab,
+                            safeAreaInsets: 'top'
 
                             }}
-                        hideStatusBar={true}
+                        screenOptions={{headerShown: false}}
 
                         >
                             <Tab.Screen 
@@ -47,13 +46,13 @@ export default function Routes(){
                                 tabBarIcon: () => 
                                 <Icon 
                                     name='list' 
-                                    size={30}
+                                    size={27}
                                     color='white'
                                     style={styles.icon}
                                 />,
                                 }}
                             />
-
+{/* 
                             <Tab.Screen
                                 name="Localização"
                                 component={Location}
@@ -62,12 +61,12 @@ export default function Routes(){
                                     tabBarIcon: () => 
                                         <Icon
                                             name='map-pin'
-                                            size={30}
+                                            size={27}
                                             color='white'
                                             style={styles.icon}
                                         />
                                 }}
-                            />
+                            /> */}
                             <Tab.Screen 
                             name="Novo Descarte" 
                             component={ReadBarcode}
@@ -76,13 +75,13 @@ export default function Routes(){
                                 tabBarIcon: () => 
                                 <Icon
                                     name='plus-circle'
-                                    size={30}
+                                    size={38}
                                     color='white'
                                     style={styles.icon}
                                 />
                                 }}
                             />
-                            <Tab.Screen 
+                            {/* <Tab.Screen 
                             name="Meus descartes" 
                             component={MyDiscards}
                             options={{
@@ -90,12 +89,12 @@ export default function Routes(){
                                 tabBarIcon: () =>
                                 <Icon 
                                     name='trash-2' 
-                                    size={30}
+                                    size={27}
                                     color='white'
                                     style={styles.icon}
                                 />,
                                 }}
-                            />
+                            /> */}
                             <Tab.Screen
                                 name="Perfil"
                                 component={Profile}
@@ -104,7 +103,7 @@ export default function Routes(){
                                     tabBarIcon: () => 
                                         <Icon
                                             name='user'
-                                            size={30}
+                                            size={27}
                                             color='white'
                                             style={styles.icon}
                                         />
@@ -124,17 +123,11 @@ export default function Routes(){
 }
 
 const styles = StyleSheet.create({
-    header: {
-      margin: 5,
-      fontSize: 18,
-      color: 'white'
-    },
-    headerContainer: {
+    tab: {
       backgroundColor: '#31ce8c',
-      height: 60,
-      justifyContent: 'center'
     },
     icon:{
-        opacity: 0.8
+        opacity: 0.8,
+        
     }
   })

@@ -1,51 +1,113 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
-import {Text, SafeAreaView, Image, View, StyleSheet} from 'react-native';
+import {Text, SafeAreaView, Image, View, StyleSheet, FlatList} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 
 import UserContext from '../contexts/UserContext';
+import Product from '../components/Product'
+
+import api from '../services/api'
 
 export default function Profile({navigation}){
-
+    const [ userData, setUserData] = useState({})
+    const [ products, setProducts] = useState([])
+    
     const { token } = useContext(UserContext);
 
     useEffect(() => {
-        async function getPoints(){
+        async function getUserData(){
             const response =  await api.get('/get/user', {'headers': {'Authorization': token}});
-            console.log(response)
-            setPoints(response.data.data[0].points);
+            
+            const data = response.data.data[0]
+
+            setUserData({
+                name: data.name,
+                points: data.points,
+                quantity: products.length
+            })
         }
-        getPoints();
+        getUserData();
     },[])
 
-    let points = getPoints();
 
-    console.log("PONTOS:",points)
+    async function getProducts(){
+        const response = await api.get('/get/user/inventory', {'headers':{"Authorization": token}});
+        setProducts(response.data.data);
+    }
+    useEffect(() => {
+      getProducts();
+    },[]);
+
     return (
-        <SafeAreaView>
-            <LinearGradient colors={['rgba(34,193,195,1)', 'rgba(49,206,140,1)']}>
+        <SafeAreaView style={styles.screen}>
+            <LinearGradient colors={['#31ce8c', '#50b69b']} style={styles.container}>
                 <View style={styles.userView}>
                     <Image style={styles.profileImg}source={require('../assets/profile.png')}/>
-                    <Text>username</Text>
+                    <Text style={styles.userName}>{userData.name}</Text>
                 </View>
                 <View style={styles.info}>
-                    <Text> {points} xp</Text>
-                    <Text> 6 itens descartados</Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={styles.details}>{userData.points} </Text>
+                        <Text style={{fontSize: 12, color:'white'}}>xp</Text>
+                    </View>
+
+                    <View style={{flexDirection: 'column', alignItems: 'center'}}>
+                        <Text style={styles.details}> {userData.quantity} </Text>
+                        <Text style={{fontSize: 12, color:'white'}}>Descartes</Text>
+                    </View>
                 </View>
             </LinearGradient>
+
+
+            <View>
+            { products!=[] ?(
+                <FlatList
+                    data={products}
+                    keyExtractor={ (item) => item.id_item.toString()}
+                    renderItem={({item}) => (
+                        <Product 
+                        image={item.img_base64}
+                        title={item.name}
+                        description={item.material}
+                        points={item.points}
+                        quantity={item.quantity}
+                        />
+                    )}
+                />
+                ): undefined }
+            </View>
             
         </SafeAreaView>
     )
 }
 
-const width = 75;
+const width = 50;
 
 const styles = StyleSheet.create({
-    
+    screen :{
+        backgroundColor: '#f2f3f5',
+        flex: 1
+    },
+    container :{
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 3.84,
+        elevation: 8,
+    },
     userView:{
         flexDirection: 'row',
-        height: 200,
+        height: 75,
         alignItems: 'center',
+        padding: 2,
+        marginTop: 10
+    },
+    userName:{
+        fontSize: 18,
+        color: '#f2f3f5',
     },
     profileImg: {
         borderRadius: width,
@@ -56,5 +118,12 @@ const styles = StyleSheet.create({
     info: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent:'space-around',
+        marginBottom: 10,
+    },
+    details: {
+        color: 'white',
+        fontSize: 20,
+        
     }
 })
