@@ -1,54 +1,54 @@
 import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Async } from "react-native";
-import AsyncStorage from '@react-native-community/async-storage'
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import Logo from "../components/Logo";
 import Background from "../components/Background";
 import Header from "../components/header";
 import TextInput from "../components/TextInput";
 import BackButton from "../components/BackButton";
-import Button from '../components/Button';
+import Button from "../components/Button";
+import { useNavigation } from "@react-navigation/native";
 
 import api from "../services/api";
 import UserContext from "../contexts/UserContext";
 
-export default function Login({ navigation }) {
+export default function Login() {
+  const { handleLogin } = useContext(UserContext);
+  
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
-  const { handleLogin } = useContext(UserContext);
-  
-  const _storeData = async (token) => {
-    try{
+  const navigation = useNavigation();
+
+
+  const _storeData = async (token: string) => {
+    try {
       await AsyncStorage.setItem("token", token);
-    }catch{
-      console.log("Erro ao armazenar o token");
+    } catch {
+      console.error("Erro ao armazenar o token");
     }
-  }
-  
+  };
+
   async function onLoginPressed() {
     const data = {
       email: email.value,
-      password: password.value
+      password: password.value,
     };
-    
+
     try {
       const response = await api.post("/login/user", data, {
-        "content-type": "application/json",
+        headers: { "content-type": "application/json" },
       });
 
       const token = response.data.data.token;
 
-      if(token != null){
+      if (token != null) {
         _storeData(token);
-        handleLogin(token)
+        handleLogin(token);
       }
-      
-      
-      
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
-    
   }
   return (
     <Background>
@@ -56,6 +56,7 @@ export default function Login({ navigation }) {
       <Logo />
       <Header> Bem vindo!</Header>
       <TextInput
+        description
         label="Email"
         returnKeyType="next"
         value={email.value}
@@ -88,7 +89,7 @@ export default function Login({ navigation }) {
       </Button>
       <View style={styles.row}>
         <Text> Não tem uma conta? </Text>
-        <TouchableOpacity onPress={() => navigation.replace("Register")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text style={styles.link}> Cadastre-se </Text>
         </TouchableOpacity>
       </View>
@@ -97,21 +98,21 @@ export default function Login({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    forgotPassword: {
-      width: '100%',
-      alignItems: 'flex-end',
-      marginBottom: 24,
-    },
-    row: {
-      flexDirection: 'row',
-      marginTop: 4,
-    },
-    forgot: {
-      fontSize: 13,
-      color: '#000',
-    },
-    link: {
-      fontWeight: 'bold',
-      color:'#31ce8c',
-    },
-  });
+  forgotPassword: {
+    width: "100%",
+    alignItems: "flex-end",
+    marginBottom: 24,
+  },
+  row: {
+    flexDirection: "row",
+    marginTop: 4,
+  },
+  forgot: {
+    fontSize: 13,
+    color: "#000",
+  },
+  link: {
+    fontWeight: "bold",
+    color: "#31ce8c",
+  },
+});

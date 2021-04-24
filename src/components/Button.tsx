@@ -11,7 +11,7 @@ const Button = ({ mode, style, ...props }) => (
     ]}
     labelStyle={styles.text}
     mode={mode}
-    theme={{colors: {primary: '#31ce8c', underlineColor: 'transparent'}}}
+    theme={{colors: {primary: '#31ce8c'}}}
     {...props}
   />
 )
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     lineHeight: 26,
+    color: "#FFF"
   },
 })
 
