@@ -5,12 +5,19 @@ import {LinearGradient} from 'expo-linear-gradient';
 
 import UserContext from '../contexts/UserContext';
 import Product from '../components/Product'
+import { ProductProps } from '../types/ProductProps';
 
 import api from '../services/api'
 
-export default function Profile({navigation}){
-    const [ userData, setUserData] = useState({})
-    const [ products, setProducts] = useState([])
+type UserData = {
+    name: string;
+    quantity: number;
+    points: number;
+}
+
+export default function Profile(){
+    const [ userData, setUserData] = useState({} as UserData)
+    const [ products, setProducts] = useState<ProductProps[]>([])
     
     const { token } = useContext(UserContext);
 
@@ -19,16 +26,20 @@ export default function Profile({navigation}){
             const response =  await api.get('/get/user', {'headers': {'Authorization': token}});
             
             const data = response.data.data[0]
+            
+            let quantity = 0;
+            products.map((product: ProductProps) =>{
+                quantity += product.quantity
+            })
 
             setUserData({
                 name: data.name,
                 points: data.points,
-                quantity: products.length
+                quantity: quantity
             })
         }
         getUserData();
     },[])
-
 
     async function getProducts(){
         const response = await api.get('/get/user/inventory', {'headers':{"Authorization": token}});
@@ -65,10 +76,11 @@ export default function Profile({navigation}){
                     data={products}
                     keyExtractor={ (item) => item.id_item.toString()}
                     renderItem={({item}) => (
-                        <Product 
-                        image={item.img_base64}
-                        title={item.name}
-                        description={item.material}
+                        <Product
+                        id_item={item.id_item}
+                        img_base64={item.img_base64}
+                        name={item.name}
+                        material={item.material}
                         points={item.points}
                         quantity={item.quantity}
                         />
