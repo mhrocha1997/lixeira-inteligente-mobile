@@ -21,6 +21,7 @@ export default function MyDiscards(){
       getProducts();
     },[]);
 
+
     return (
         <SafeAreaView>
             <View>
@@ -31,6 +32,7 @@ export default function MyDiscards(){
                     keyExtractor={ (item) => item.id_item.toString()}
                     renderItem={({item}) => (
                     <Product
+                      id_item={item.id_item}
                       img_base64={item.img_base64}
                       name={item.name}
                       material={item.material}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, SafeAreaView } from "react-native";
+import { View, SafeAreaView, Text } from "react-native";
 import Product from "../components/Product";
-import Header from "../components/header";
 import api from "../services/api";
 import { FlatList } from "react-native-gesture-handler";
 import UserContext from "../contexts/UserContext";
@@ -42,7 +41,7 @@ export default function Catalog() {
             )}
           />
         ) : (
-          <Header> Ainda não há produtos cadastrados</Header>
+          <Text> Ainda não há produtos cadastrados</Text>
         )}
       </View>
     </SafeAreaView>
