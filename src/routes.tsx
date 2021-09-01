@@ -20,7 +20,9 @@ export default function Routes() {
   const AppStack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  const { isSigned } = useContext(UserContext);
+  // const { isSigned } = useContext(UserContext);
+
+  const isSigned = true;
 
   return (
     <NavigationContainer>
