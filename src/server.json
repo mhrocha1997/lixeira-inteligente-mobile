@@ -1,0 +1,29 @@
+{
+    "products": [
+        {
+            "id_item": 1,
+            "img_base64": "123123123",
+            "name": "Coca-Cola",
+            "Material": "PET",
+            "points": 30,
+            "quantity": 2
+            
+        },
+        {
+            "id_item": 2,
+            "img_base64": "123123123123",
+            "name": "Desinfetante",
+            "Material": "PP",
+            "points": 23,
+            "quantity": 2
+        },
+        {
+            "id_item": 3,
+            "img_base64": "123123123",
+            "name": "Alvejante",
+            "Material": "PP",
+            "points": 45,
+            "quantity": 2
+        }
+    ]
+}
