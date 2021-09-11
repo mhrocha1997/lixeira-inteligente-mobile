@@ -21,9 +21,10 @@ export default function Routes() {
   const AppStack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  // const { isSigned } = useContext(UserContext);
+  // const { isSigned, isAdmin } = useContext(UserContext);
 
   const isSigned = true;
+  const isAdmin = true;
 
   return (
     <NavigationContainer>
@@ -46,32 +47,41 @@ export default function Routes() {
               ),
             }}
           />
-          <Tab.Screen
-            name="Novo Descarte"
-            component={ReadBarcode}
-            options={{
-              tabBarLabel: () => null,
-              tabBarIcon: () => (
-                <Icon
-                  name="plus-circle"
-                  size={38}
-                  color="white"
-                  style={styles.icon}
+          {
+            isAdmin ? (
+              undefined
+            ): (
+              <>
+                <Tab.Screen
+                  name="Novo Descarte"
+                  component={ReadBarcode}
+                  options={{
+                    tabBarLabel: () => null,
+                    tabBarIcon: () => (
+                      <Icon
+                        name="plus-circle"
+                        size={38}
+                        color="white"
+                        style={styles.icon}
+                      />
+                    ),
+                  }}
                 />
-              ),
-            }}
-          />
 
-          <Tab.Screen
-            name="Perfil"
-            component={Profile}
-            options={{
-              tabBarLabel: () => null,
-              tabBarIcon: () => (
-                <Icon name="user" size={27} color="white" style={styles.icon} />
-              ),
-            }}
-          />
+                <Tab.Screen
+                  name="Perfil"
+                  component={Profile}
+                  options={{
+                    tabBarLabel: () => null,
+                    tabBarIcon: () => (
+                      <Icon name="user" size={27} color="white" style={styles.icon} />
+                    ),
+                  }}
+                />
+              </>
+            )
+          }
+          
         </Tab.Navigator>
       ) : (
         <AppStack.Navigator screenOptions={{ headerShown: false }}>

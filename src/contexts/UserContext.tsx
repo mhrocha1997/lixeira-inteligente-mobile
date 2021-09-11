@@ -6,56 +6,49 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 
-import api from "../services/api";
+import { getUserData, verifyToken } from "../services/api";
 
 type Children = {
     children: ReactNode;
   };
   
 type UserContext = {
-    token: string;
+    token: string | null;
     isSigned: boolean;
     handleLogin: (token: string) => void;
     points: number;
+    isAdmin: boolean;
 }
 
 const UserContext = createContext({} as UserContext);
 
 export const UserProvider = ({ children }: Children) => {
-  const [token, setToken] = useState<string>('');
-  const [isSigned, setIsSigned] = useState(false);
+  const [token, setToken] = useState<string | null>('');
+  const [isSigned, setIsSigned] = useState<boolean>(false);
   const [points, setPoints] = useState(0);
+  const [isAdmin, setAdmin] = useState(false);
 
   useEffect(() => {
-    async function getPoints() {
-      const response = await api.get("/get/user", {
-        headers: { Authorization: token },
-      });
-      setPoints(response.data.data[0].points);
+    async function fetchUserData(){
+      const data = await getUserData();
+      setPoints(data.points);
+      setAdmin(data.isAdmin)
     }
-    getPoints();
+    fetchUserData();
   }, []);
 
   useEffect(() => {
-    async function verifyToken() {
+    async function authenticate() {
       try {
         const token = await AsyncStorage.getItem("token");
-        if (token !== null) {
-          setToken(token);
-          const response = await api.get("/token", {
-            headers: { Authorization: token },
-          });
-          if (response.status == 200) {
-            setIsSigned(true);
-          } else {
-            setIsSigned(false);
-          }
-        }
+        const auth = await verifyToken(token);
+          setIsSigned(auth);
+          setToken(token)
       } catch (e) {
         console.error("Erro ao ler o token", e);
       }
     }
-    verifyToken();
+    authenticate();
   }, []);
 
   function handleLogin(token: string) {
@@ -64,7 +57,7 @@ export const UserProvider = ({ children }: Children) => {
   }
 
   return (
-    <UserContext.Provider value={{ isSigned, token, points, handleLogin }}>
+    <UserContext.Provider value={{ isSigned, token, points, handleLogin, isAdmin }}>
       {children}
     </UserContext.Provider>
   );

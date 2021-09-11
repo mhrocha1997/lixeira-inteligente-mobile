@@ -6,47 +6,30 @@ import {LinearGradient} from 'expo-linear-gradient';
 import UserContext from '../contexts/UserContext';
 import Product from '../components/Product'
 import { ProductProps } from '../types/ProductProps';
+import { UserData } from '../types/UserProps';
 
-import api from '../services/api'
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
-import { getCatalogFake } from '../services/fake_api';
 
-type UserData = {
-    name: string;
-    quantity: number;
-    points: number;
-}
+import {getUserInventory, getUserData} from '../services/api'
+import { getCatalogFake, getUserFake } from '../services/fake_api';
 
 export default function Profile(){
     const [ userData, setUserData] = useState({} as UserData)
     const [ products, setProducts] = useState<ProductProps[]>([])
     
-    const { token } = useContext(UserContext);
-
     useEffect(() => {
-        async function getUserData(){
-            const response =  await api.get('/get/user', {'headers': {'Authorization': token}});
-            
-            const data = response.data.data[0]
-            
-            let quantity = 0;
-            products.map((product: ProductProps) =>{
-                quantity += product.quantity
-            })
-
-            setUserData({
-                name: data.name,
-                points: data.points,
-                quantity: quantity
-            })
+        async function fetchUserData(){
+            const data = await getUserFake();
+            // const data = await getUserData();
+            setUserData(data);
         }
-        getUserData();
+        fetchUserData();
     },[])
 
     async function getProducts(){
-        // const response = await api.get('/get/user/inventory', {'headers':{"Authorization": token}});
-        let products = await getCatalogFake();
+        // const products = await getUserInventory();
+        const products = await getCatalogFake();
         setProducts(products);
     }
     useEffect(() => {

@@ -5,9 +5,9 @@ import Background from '../components/Background';
 import Header from '../components/header';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button';
-import api from '../services/api';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import { register } from '../services/api';
 
 
 export default function Register({navigation}){
@@ -28,12 +28,18 @@ export default function Register({navigation}){
         };
 
         try{
-            const response = await api.post('/create/user',data,{'content-type': 'application/json'})
+            const response = await register(data);
+            response ?
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Login" }],
+                })
+                :
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Register" }],
+                  })
 
-            navigation.reset({
-                index: 0,
-                routes: [{ name: "Login" }],
-              });
         }catch(err){
             navigation.reset({
                 index: 0,
