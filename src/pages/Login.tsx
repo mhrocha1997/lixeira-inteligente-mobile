@@ -9,11 +9,11 @@ import BackButton from "../components/BackButton";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
 
-import api from "../services/api";
 import UserContext from "../contexts/UserContext";
 
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
+import { login } from "../services/api";
 
 export default function Login() {
   const { handleLogin } = useContext(UserContext);
@@ -39,11 +39,7 @@ export default function Login() {
     };
 
     try {
-      const response = await api.post("/login/user", data, {
-        headers: { "content-type": "application/json" },
-      });
-
-      const token = response.data.data.token;
+      const token = await login(data);
 
       if (token != null) {
         _storeData(token);
