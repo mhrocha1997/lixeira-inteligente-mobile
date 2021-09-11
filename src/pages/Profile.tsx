@@ -8,6 +8,9 @@ import Product from '../components/Product'
 import { ProductProps } from '../types/ProductProps';
 
 import api from '../services/api'
+import colors from '../styles/colors';
+import fonts from '../styles/fonts';
+import { getCatalogFake } from '../services/fake_api';
 
 type UserData = {
     name: string;
@@ -42,8 +45,9 @@ export default function Profile(){
     },[])
 
     async function getProducts(){
-        const response = await api.get('/get/user/inventory', {'headers':{"Authorization": token}});
-        setProducts(response.data.data);
+        // const response = await api.get('/get/user/inventory', {'headers':{"Authorization": token}});
+        let products = await getCatalogFake();
+        setProducts(products);
     }
     useEffect(() => {
       getProducts();
@@ -51,20 +55,48 @@ export default function Profile(){
 
     return (
         <SafeAreaView style={styles.screen}>
-            <LinearGradient colors={['#31ce8c', '#50b69b']} style={styles.container}>
+            <LinearGradient 
+                colors={[colors.green_light, colors.green_dark]} 
+                style={styles.container}
+            >
                 <View style={styles.userView}>
-                    <Image style={styles.profileImg}source={require('../assets/profile.png')}/>
-                    <Text style={styles.userName}>{userData.name}</Text>
+                    <View style={{flexDirection: 'column'}}>
+                        <Text 
+                            style={styles.userName}
+                        >
+                            Olá, {userData.name}
+                        </Text>
+
+                        <Text 
+                            style={styles.details}
+                        >
+                            Esse é o seu resumo
+                        </Text>
+                    </View>
+                    <Image 
+                        style={styles.profileImg}
+                        source={require('../assets/profile.png')}
+                    />
                 </View>
                 <View style={styles.info}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={styles.details}>{userData.points} </Text>
-                        <Text style={{fontSize: 12, color:'white'}}>xp</Text>
+                    <View 
+                        style={{flexDirection: 'row', alignItems: 'center'}}
+                    >
+                        <Text 
+                            style={styles.details}
+                        >
+                            {userData.points} xp
+                        </Text>
                     </View>
 
-                    <View style={{flexDirection: 'column', alignItems: 'center'}}>
-                        <Text style={styles.details}> {userData.quantity} </Text>
-                        <Text style={{fontSize: 12, color:'white'}}>Descartes</Text>
+                    <View 
+                        style={{flexDirection: 'column', alignItems: 'center'}}
+                    >
+                        <Text 
+                            style={styles.details}
+                        >
+                                {userData.quantity} Descartes
+                        </Text>
                     </View>
                 </View>
             </LinearGradient>
@@ -97,7 +129,7 @@ const width = 50;
 
 const styles = StyleSheet.create({
     screen :{
-        backgroundColor: '#f2f3f5',
+        backgroundColor: colors.background_white,
         flex: 1
     },
     container :{
@@ -109,17 +141,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 3.84,
         elevation: 8,
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15,
     },
     userView:{
         flexDirection: 'row',
         height: 75,
         alignItems: 'center',
+        justifyContent: 'space-around',
         padding: 2,
         marginTop: 10
     },
     userName:{
-        fontSize: 18,
+        fontSize: 25,
         color: '#f2f3f5',
+        fontFamily: fonts.title,
     },
     profileImg: {
         borderRadius: width,
@@ -136,6 +172,6 @@ const styles = StyleSheet.create({
     details: {
         color: 'white',
         fontSize: 20,
-        
-    }
+        fontFamily: fonts.text
+    },
 })

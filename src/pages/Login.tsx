@@ -12,6 +12,9 @@ import { useNavigation } from "@react-navigation/native";
 import api from "../services/api";
 import UserContext from "../contexts/UserContext";
 
+import colors from "../styles/colors";
+import fonts from "../styles/fonts";
+
 export default function Login() {
   const { handleLogin } = useContext(UserContext);
   
@@ -84,7 +87,7 @@ export default function Login() {
           <Text style={styles.forgot}>Esqueceu sua senha?</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={onLoginPressed}>
+      <Button style={styles.button} mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
       <View style={styles.row}>
@@ -102,17 +105,24 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "flex-end",
     marginBottom: 24,
+    fontFamily: fonts.text,
   },
   row: {
     flexDirection: "row",
     marginTop: 4,
+    fontFamily: fonts.text,
   },
   forgot: {
     fontSize: 13,
-    color: "#000",
+    color: colors.green_text,
+    fontFamily: fonts.title,
   },
   link: {
     fontWeight: "bold",
-    color: "#31ce8c",
+    color: colors.green_text,
+    fontFamily: fonts.text,
   },
+  button: {
+    fontFamily: fonts.title,
+  }
 });

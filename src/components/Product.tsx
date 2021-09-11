@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import colors from "../styles/colors";
+import fonts from "../styles/fonts";
 import { ProductProps } from "../types/ProductProps";
 
 export default function Product({
@@ -13,15 +15,21 @@ export default function Product({
   return (
     <View style={styles.centeredView}>
       <View style={styles.cardView}>
+        <Image source={{ uri: base64Image }} style={styles.productImage} />
         <View style={styles.infoView}>
           <Text style={styles.titleText}>{name}</Text>
           <Text style={styles.descriptionText}>Material: {material}</Text>
-          {quantity && (
-            <Text style={styles.descriptionText}>Quantidade: {quantity}</Text>
-          )}
-          <Text style={styles.pointsText}>{points} pontos</Text>
+          <View
+            style={{flexDirection: 'row', alignItems:'flex-end', flex: 1}}
+          >
+            <Text style={styles.pointsText}>{points}xp</Text>
+            {
+              quantity ? (
+                <Text style={styles.pointsText}>{quantity} Descartes</Text>
+              ):undefined
+            }
+          </View>
         </View>
-        <Image source={{ uri: base64Image }} style={styles.productImage} />
       </View>
     </View>
   );
@@ -37,8 +45,8 @@ const styles = StyleSheet.create({
 
   cardView: {
     flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: "white",
+    justifyContent: "flex-start",
+    backgroundColor: colors.background_gray_light,
     borderRadius: 15,
     padding: 15,
     shadowColor: "#31ce8c",
@@ -49,32 +57,37 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: "80%",
+    width: "85%",
     minHeight: 150,
   },
   infoView: {
     flex: 1,
+    alignItems: 'flex-start'
   },
   productImage: {
-    flex: 1,
+    width: '35%',
     resizeMode: "contain",
   },
-
   descriptionText: {
-    flex: 1,
+    fontFamily: fonts.text,
+    color: colors.green_text,
+    fontSize: 12,
   },
 
   titleText: {
-    color: "black",
+    color: colors.green_text,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 22,
     marginBottom: 5,
+    fontFamily: fonts.title,
   },
 
   pointsText: {
-    color: "#31ce8c",
-    fontWeight: "bold",
+    color: colors.green_text,
+    fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 5,
+    marginVertical: 5,
+    justifyContent: 'space-around',
+    flex: 1,
   },
 });

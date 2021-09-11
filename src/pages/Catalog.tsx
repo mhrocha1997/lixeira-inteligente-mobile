@@ -1,30 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, SafeAreaView, Text } from "react-native";
 import Product from "../components/Product";
-import api from "../services/api";
+import {getCatalog} from "../services/api";
 import { FlatList } from "react-native-gesture-handler";
 import UserContext from "../contexts/UserContext";
 import { ProductProps } from "../types/ProductProps";
+import { getCatalogFake } from "../services/fake_api";
+import colors from "../styles/colors";
 
 export default function Catalog() {
   const [products, setProducts] = useState<ProductProps[]>([]);
-
-  const { token } = useContext(UserContext);
-
-  async function getProducts() {
-    const response = await api.get("/get/item/full", {
-      headers: { "Content-Type": "application/json", Authorization: token },
-    });
-    setProducts(response.data.data);
-  }
-
+  
   useEffect(() => {
-    getProducts();
+    async function fetchProducts(){
+      // let products = await getCatalog();
+      let products = await getCatalogFake();
+      setProducts(products);
+    }
+    fetchProducts();
   }, []);
 
   return (
     <SafeAreaView>
-      <View>
+      <View style={{backgroundColor: colors.background_white}}>
         {products != [] ? (
           <FlatList
             data={products}
