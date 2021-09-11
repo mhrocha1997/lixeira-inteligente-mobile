@@ -6,6 +6,8 @@ import Header from '../components/header';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button';
 import api from '../services/api';
+import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 
 
 export default function Register({navigation}){
@@ -80,7 +82,7 @@ export default function Register({navigation}){
                 Enviar
             </Button>
 
-            <View>
+            <View style={styles.login}>
                 <Text>Já tem uma conta?</Text>
                 <TouchableOpacity onPress={() => navigation.replace('Login')}>
                     <Text style={styles.link}>Faça Login</Text>
@@ -94,9 +96,16 @@ const styles = StyleSheet.create({
     row: {
       flexDirection: 'row',
       marginTop: 4,
+      fontFamily: fonts.text
     },
     link: {
       fontWeight: 'bold',
-      color: '#36AE7C',
+      color: colors.green_text,
+      marginLeft: '2px',
+      fontFamily: fonts.text,
     },
+    login: {
+        flexDirection: 'row',
+        fontFamily: fonts.text,
+    }
   })

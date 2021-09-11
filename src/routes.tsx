@@ -15,6 +15,7 @@ import ReadBarcode from "./pages/ReadBarcode";
 import Profile from "./pages/Profile";
 
 import UserContext from "./contexts/UserContext";
+import colors from "./styles/colors";
 
 export default function Routes() {
   const AppStack = createStackNavigator();
@@ -84,7 +85,9 @@ export default function Routes() {
 
 const styles = StyleSheet.create({
   tab: {
-    backgroundColor: "#31ce8c",
+    backgroundColor: colors.green_light,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
   icon: {
     opacity: 0.8,
