@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { TrashProps } from '../types/TrashProps';
 import { UserData } from '../types/UserProps';
 
 const api = axios.create({
-    baseURL: 'http://10.0.2.2:3000'
+    baseURL: 'https://my-json-server.typicode.com/mhrocha1997/lixeira-inteligente-mobile'
 });
 
 export async function getCatalogFake() {
@@ -21,4 +22,14 @@ export async function getUserFake(): Promise<UserData>{
         isAdmin: data.is_admin,
     }
     return userData;
+}
+
+export async function getTrashesFake(): Promise<TrashProps[]>{
+    const response = await api.get('/trashes');
+    console.log(response.status)
+    if (response.status == 200){
+        return response.data;
+    }else{
+        return { } as TrashProps[];
+    }
 }

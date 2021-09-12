@@ -39,5 +39,14 @@
             "name": "Clietin O Gerente",
             "is_admin": true
         }
+    ],
+    "trashes": [
+        {
+            "id": 1,
+            "title": "UNIFEI - RA",
+            "capacity": "20 litros",
+            "occupation": "40%",
+            "status": "ok"
+        }
     ]
 }

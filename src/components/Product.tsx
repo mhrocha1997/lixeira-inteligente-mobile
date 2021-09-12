@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 import { ProductProps } from "../types/ProductProps";
+import CardView from "./CardView";
 
 export default function Product({
   img_base64,
@@ -13,9 +14,8 @@ export default function Product({
 }: ProductProps) {
   let base64Image = `data:image/png;base64,${img_base64}`;
   return (
-    <View style={styles.centeredView}>
-      <View style={styles.cardView}>
-        <Image source={{ uri: base64Image }} style={styles.productImage} />
+    <CardView>
+      <Image source={{ uri: base64Image }} style={styles.productImage} />
         <View style={styles.infoView}>
           <Text style={styles.titleText}>{name}</Text>
           <Text style={styles.descriptionText}>Material: {material}</Text>
@@ -30,8 +30,7 @@ export default function Product({
             }
           </View>
         </View>
-      </View>
-    </View>
+    </CardView>
   );
 }
 
@@ -73,7 +72,6 @@ const styles = StyleSheet.create({
     color: colors.green_text,
     fontSize: 12,
   },
-
   titleText: {
     color: colors.green_text,
     fontWeight: "bold",

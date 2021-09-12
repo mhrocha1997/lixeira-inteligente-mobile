@@ -9,10 +9,11 @@ import Icon from "react-native-vector-icons/Feather";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
 import Catalog from "./pages/Catalog";
 import ReadBarcode from "./pages/ReadBarcode";
 import Profile from "./pages/Profile";
+import TrashControl from "./pages/TrashControl";
+import UserControl from "./pages/UserControl";
 
 import UserContext from "./contexts/UserContext";
 import colors from "./styles/colors";
@@ -24,7 +25,7 @@ export default function Routes() {
   // const { isSigned, isAdmin } = useContext(UserContext);
 
   const isSigned = true;
-  const isAdmin = true;
+  const isAdmin = false;
 
   return (
     <NavigationContainer>
@@ -43,13 +44,49 @@ export default function Routes() {
             options={{
               tabBarLabel: () => null,
               tabBarIcon: () => (
-                <Icon name="list" size={27} color="white" style={styles.icon} />
+                <Icon 
+                  name="list" 
+                  size={27} 
+                  color="white" 
+                  style={styles.icon} 
+                />
               ),
             }}
           />
           {
             isAdmin ? (
-              undefined
+              <>
+                <Tab.Screen
+                  name="Controle de Lixeiras"
+                  component={TrashControl}
+                  options={{
+                    tabBarLabel: () => null,
+                    tabBarIcon: () => (
+                      <Icon 
+                        name='trash-2' 
+                        size={27} 
+                        color="white" 
+                        style={styles.icon}
+                      />
+                    )
+                  }}
+                />
+                <Tab.Screen
+                  name="Controle de Usuários"
+                  component={UserControl}
+                  options={{
+                    tabBarLabel: () => null,
+                    tabBarIcon: () => (
+                      <Icon 
+                        name='users' 
+                        size={27} 
+                        color="white" 
+                        style={styles.icon}
+                      />
+                    )
+                  }}
+                />
+              </>
             ): (
               <>
                 <Tab.Screen
