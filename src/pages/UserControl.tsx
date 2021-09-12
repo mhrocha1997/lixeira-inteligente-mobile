@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
+import User from '../components/User';
 
 export default function UserControl(){
     return (
-        <View>
-            <Text>Contole de Usuários</Text>
-        </View>
+        <SafeAreaView>
+            <User />
+
+        </SafeAreaView>
     )
 }

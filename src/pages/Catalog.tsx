@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, SafeAreaView, Text } from "react-native";
+import { View, SafeAreaView, Text, StyleSheet } from "react-native";
 import Product from "../components/Product";
 import {getCatalog} from "../services/api";
 import { FlatList } from "react-native-gesture-handler";
@@ -21,10 +21,10 @@ export default function Catalog() {
   }, []);
 
   return (
-    <SafeAreaView>
-      <View style={{backgroundColor: colors.background_white}}>
+    <SafeAreaView >
         {products != [] ? (
           <FlatList
+            style={{height: '100%'}}
             data={products}
             keyExtractor={(item) => item.id_item.toString()}
             renderItem={({ item }) => (
@@ -41,7 +41,6 @@ export default function Catalog() {
         ) : (
           <Text> Ainda não há produtos cadastrados</Text>
         )}
-      </View>
     </SafeAreaView>
   );
 }

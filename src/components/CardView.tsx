@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: "center",
       marginTop: 20,
+      marginBottom: 5,
       justifyContent: "space-between",
     },
     cardView: {
@@ -30,14 +31,15 @@ const styles = StyleSheet.create({
       backgroundColor: colors.background_gray_light,
       borderRadius: 15,
       padding: 15,
-      shadowColor: "#31ce8c",
+      shadowColor: "#000",
       shadowOffset: {
         width: 0,
-        height: 2,
+        height: 6,
       },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
+      shadowOpacity: 0.37,
+      shadowRadius: 7.49,
+
+      elevation: 12,
       width: "85%",
       minHeight: 150,
     },

@@ -8,6 +8,9 @@ import {
 import CardView from './CardView';
 
 import trashOk from '../assets/trashOk.png';
+import trashWarning from '../assets/trashWarning.png';
+import trashAlert from '../assets/trashAlert.png';
+
 import location from '../assets/location.png';
 
 import colors from '../styles/colors';
@@ -15,19 +18,23 @@ import fonts from '../styles/fonts';
 import Icon from 'react-native-vector-icons/Feather';
 import { TrashProps } from '../types/TrashProps';
 
-
-
 export default function Thrash({
     title,
     capacity,
     occupation,
     status,
 }: TrashProps){
+    const switchImage: any = {
+        ok: trashOk,
+        warning: trashWarning,
+        alert: trashAlert,
+    }
+    
     return (
         <CardView>
             <View style={{width: '35%'}}>
                 <Image 
-                    source={trashOk} 
+                    source={switchImage[status]} 
                     style={styles.trashImg}
                 />
             </View>

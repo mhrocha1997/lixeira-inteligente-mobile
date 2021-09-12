@@ -15,7 +15,6 @@ import Profile from "./pages/Profile";
 import TrashControl from "./pages/TrashControl";
 import UserControl from "./pages/UserControl";
 
-import UserContext from "./contexts/UserContext";
 import colors from "./styles/colors";
 
 export default function Routes() {
@@ -25,7 +24,7 @@ export default function Routes() {
   // const { isSigned, isAdmin } = useContext(UserContext);
 
   const isSigned = true;
-  const isAdmin = false;
+  const isAdmin = true;
 
   return (
     <NavigationContainer>
