@@ -4,7 +4,7 @@ import { StyleSheet, SafeAreaView, Text, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 
-import api from "../services/api";
+import api from "../services/UserService";
 import UserContext from "../contexts/UserContext";
 
 export default function ReadCodebar() {
@@ -40,7 +40,6 @@ export default function ReadCodebar() {
     };
     try {
       const response = await api.post(url, body, header);
-      console.log(response)
       if (response.status == 200) {
         setIsScanned(true);
         Alert.alert('Produto descartado com sucesso!','Você deseja:',[
@@ -63,7 +62,7 @@ export default function ReadCodebar() {
       }
 
     }catch(e){
-      console.log(e);
+      console.error(e);
     }
     
   };

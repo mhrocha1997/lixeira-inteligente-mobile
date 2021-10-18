@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Logo from "../components/Logo";
 import Background from "../components/Background";
 import Header from "../components/header";
@@ -13,9 +13,9 @@ import UserContext from "../contexts/UserContext";
 
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
-import { login } from "../services/api";
+import { signin as login } from "../services/UserService";
 
-export default function Login() {
+export default function signin() {
   const { handleLogin } = useContext(UserContext);
   
   const [email, setEmail] = useState({ value: "", error: "" });
@@ -34,13 +34,15 @@ export default function Login() {
 
   async function onLoginPressed() {
     const data = {
-      email: email.value,
-      password: password.value,
+    //   email: email.value,
+    //   password: password.value,
+      email: "marcelo.rocha@teste.com",
+      password: "senha123",
     };
 
-    try {
-      const token = await login(data);
+    const token = await login(data);
 
+    try {
       if (token != null) {
         _storeData(token);
         handleLogin(token);
@@ -59,7 +61,7 @@ export default function Login() {
         label="Email"
         returnKeyType="next"
         value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: "" })}
+        onChangeText={(text: any) => setEmail({ value: text, error: "" })}
         error={!!email.error}
         errorText={email.error}
         autoCapitalize="none"
@@ -71,7 +73,7 @@ export default function Login() {
         label="Senha"
         returnKeyType="done"
         value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: "" })}
+        onChangeText={(text: any) => setPassword({ value: text, error: "" })}
         error={!!password.error}
         errorText={password.error}
         secureTextEntry

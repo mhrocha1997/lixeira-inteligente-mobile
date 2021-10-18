@@ -4,46 +4,39 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { getUserData, verifyToken } from "../services/api";
+import { getUserData, verifyToken } from "../services/UserService";
 
 type Children = {
     children: ReactNode;
   };
   
 type UserContext = {
-    token: string | null;
+    token: string;
     isSigned: boolean;
     handleLogin: (token: string) => void;
     points: number;
-    isAdmin: boolean;
+    role: string;
 }
 
 const UserContext = createContext({} as UserContext);
 
 export const UserProvider = ({ children }: Children) => {
-  const [token, setToken] = useState<string | null>('');
+  const [token, setToken] = useState<string>('');
   const [isSigned, setIsSigned] = useState<boolean>(false);
   const [points, setPoints] = useState(0);
-  const [isAdmin, setAdmin] = useState(false);
-
-  useEffect(() => {
-    async function fetchUserData(){
-      const data = await getUserData();
-      setPoints(data.points);
-      setAdmin(data.isAdmin)
-    }
-    fetchUserData();
-  }, []);
+  const [role, setRole] = useState("");
+    
+  
 
   useEffect(() => {
     async function authenticate() {
       try {
         const token = await AsyncStorage.getItem("token");
         const auth = await verifyToken(token);
-          setIsSigned(auth);
-          setToken(token)
+        setIsSigned(auth);
+        if (token != null) setToken(token)
       } catch (e) {
         console.error("Erro ao ler o token", e);
       }
@@ -51,13 +44,23 @@ export const UserProvider = ({ children }: Children) => {
     authenticate();
   }, []);
 
+  useEffect(() => {
+    async function fetchUserData(){
+      const data = await getUserData(token);
+      console.log(data);
+      setPoints(data.points);
+      setRole(data.role)
+    }
+    fetchUserData();
+  }, [token, isSigned]);
+
   function handleLogin(token: string) {
     setToken(token);
     setIsSigned(true);
   }
 
   return (
-    <UserContext.Provider value={{ isSigned, token, points, handleLogin, isAdmin }}>
+    <UserContext.Provider value={{ isSigned, token, points, handleLogin, role }}>
       {children}
     </UserContext.Provider>
   );

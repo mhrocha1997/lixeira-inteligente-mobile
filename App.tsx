@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 
 import { 
-  Roboto_700Bold
+    Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 import {
   useFonts, UbuntuCondensed_400Regular
@@ -12,7 +12,7 @@ import Routes from './src/routes';
 import {UserProvider} from './src/contexts/UserContext';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
+  useFonts({
     Roboto_700Bold,
     UbuntuCondensed_400Regular,
   });

@@ -16,116 +16,131 @@ import TrashControl from "./pages/TrashControl";
 import UserControl from "./pages/UserControl";
 
 import colors from "./styles/colors";
+import UserContext from "./contexts/UserContext";
+
+type troleToScreen = {
+    [key: string]: Element,
+}
 
 export default function Routes() {
-  const AppStack = createStackNavigator();
-  const Tab = createBottomTabNavigator();
+    const AppStack = createStackNavigator();
+    const Tab = createBottomTabNavigator();
+    
+    let { isSigned, role } = useContext(UserContext);
 
-  // const { isSigned, isAdmin } = useContext(UserContext);
+    isSigned = false;
 
-  const isSigned = true;
-  const isAdmin = true;
-
-  return (
-    <NavigationContainer>
-      {isSigned ? (
-        <Tab.Navigator
-          initialRouteName="Perfil"
-          tabBarOptions={{
-            activeTintColor: "red",
-            style: styles.tab,
-            safeAreaInsets: {"top": 2},
-          }}
-        >
-          <Tab.Screen
+    const commonTabs = (
+        <Tab.Screen
             name="Catálogo"
             component={Catalog}
             options={{
-              tabBarLabel: () => null,
-              tabBarIcon: () => (
+            tabBarLabel: () => null,
+            tabBarIcon: () => (
                 <Icon 
-                  name="list" 
-                  size={27} 
-                  color="white" 
-                  style={styles.icon} 
+                name="list" 
+                size={27} 
+                color="white" 
+                style={styles.icon} 
                 />
-              ),
+            ),
             }}
-          />
-          {
-            isAdmin ? (
-              <>
+        />
+    )
+
+    const userTabs = (
+            <>
                 <Tab.Screen
-                  name="Controle de Lixeiras"
-                  component={TrashControl}
-                  options={{
+                name="Novo Descarte"
+                component={ReadBarcode}
+                options={{
                     tabBarLabel: () => null,
                     tabBarIcon: () => (
-                      <Icon 
-                        name='trash-2' 
-                        size={27} 
-                        color="white" 
-                        style={styles.icon}
-                      />
-                    )
-                  }}
-                />
-                <Tab.Screen
-                  name="Controle de Usuários"
-                  component={UserControl}
-                  options={{
-                    tabBarLabel: () => null,
-                    tabBarIcon: () => (
-                      <Icon 
-                        name='users' 
-                        size={27} 
-                        color="white" 
-                        style={styles.icon}
-                      />
-                    )
-                  }}
-                />
-              </>
-            ): (
-              <>
-                <Tab.Screen
-                  name="Novo Descarte"
-                  component={ReadBarcode}
-                  options={{
-                    tabBarLabel: () => null,
-                    tabBarIcon: () => (
-                      <Icon
+                    <Icon
                         name="plus-circle"
                         size={38}
                         color="white"
                         style={styles.icon}
-                      />
+                    />
                     ),
-                  }}
+                }}
                 />
-
                 <Tab.Screen
-                  name="Perfil"
-                  component={Profile}
-                  options={{
+                name="Perfil"
+                component={Profile}
+                options={{
                     tabBarLabel: () => null,
                     tabBarIcon: () => (
-                      <Icon name="user" size={27} color="white" style={styles.icon} />
+                    <Icon name="user" size={27} color="white" style={styles.icon} />
                     ),
-                  }}
+                }}
                 />
-              </>
-            )
-          }
-          
-        </Tab.Navigator>
-      ) : (
-        <AppStack.Navigator screenOptions={{ headerShown: false }}>
-          <AppStack.Screen name="Login" component={Login} />
-          <AppStack.Screen name="Register" component={Register} />
-        </AppStack.Navigator>
-      )}
-    </NavigationContainer>
+            </>
+    )
+
+    const adminTabs = (
+        <>
+            <Tab.Screen
+            name="Controle de Lixeiras"
+            component={TrashControl}
+            options={{
+                tabBarLabel: () => null,
+                tabBarIcon: () => (
+                <Icon 
+                    name='trash-2' 
+                    size={27} 
+                    color="white" 
+                    style={styles.icon}
+                />
+                )
+            }}
+            />
+            <Tab.Screen
+            name="Controle de Usuários"
+            component={UserControl}
+            options={{
+                tabBarLabel: () => null,
+                tabBarIcon: () => (
+                <Icon 
+                    name='users' 
+                    size={27} 
+                    color="white" 
+                    style={styles.icon}
+                />
+                )
+            }}
+            />
+        </>
+    )
+
+    const roleToScreen: troleToScreen = {
+        "user": userTabs,
+        "admin": adminTabs,
+        "collector": adminTabs
+    }
+    
+    return (
+        <NavigationContainer>
+        {isSigned ? (
+            <Tab.Navigator
+            initialRouteName="Perfil"
+            tabBarOptions={{
+                activeTintColor: "red",
+                style: styles.tab,
+                safeAreaInsets: {"top": 2},
+            }}
+            >
+            {commonTabs}
+            {roleToScreen[role.toLowerCase()]}
+            
+            </Tab.Navigator>
+        ) : (
+            <AppStack.Navigator screenOptions={{ headerShown: false }}>
+            <AppStack.Screen name="Login" component={Login} />
+            <AppStack.Screen name="Register" component={Register} />
+            </AppStack.Navigator>
+        )}
+        </NavigationContainer>
   );
 }
 

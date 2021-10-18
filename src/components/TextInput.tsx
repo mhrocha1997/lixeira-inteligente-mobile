@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native'
 import { TextInput as Input } from 'react-native-paper'
 
 
-export default function TextInput({ errorText, description, ...props }){
+export default function TextInput({ errorText, description, ...props }: any){
   
   return (
     <View style={styles.container}>
@@ -11,7 +11,7 @@ export default function TextInput({ errorText, description, ...props }){
         style={styles.input}
         mode="flat"
         {...props}
-        theme={{colors: {primary: '#31ce8c', underlineColor: 'transparent'}}}
+        theme={{colors: {primary: '#31ce8c'}}}
         />
         {description && !errorText ? (
         <Text style={styles.description}>{description}</Text>

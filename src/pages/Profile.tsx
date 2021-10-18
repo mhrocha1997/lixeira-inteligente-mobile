@@ -11,17 +11,22 @@ import { UserData } from '../types/UserProps';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-import {getUserInventory, getUserData} from '../services/api'
+import {
+    // getUserInventory,
+    getUserData
+} from '../services/UserService'
 import { getCatalogFake, getUserFake } from '../services/fake_api';
 
 export default function Profile(){
     const [ userData, setUserData] = useState({} as UserData)
     const [ products, setProducts] = useState<ProductProps[]>([])
+
+    const {token} = useContext(UserContext);
     
     useEffect(() => {
         async function fetchUserData(){
-            const data = await getUserFake();
-            // const data = await getUserData();
+            // const data = await getUserFake();
+            const data = await getUserData(token);
             setUserData(data);
         }
         fetchUserData();

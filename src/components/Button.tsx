@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Button as PaperButton } from 'react-native-paper'
 
-const Button = ({ mode, style, ...props }) => (
+const Button = ({ mode, style, ...props }: any) => (
   <PaperButton
     style={[
       styles.button,

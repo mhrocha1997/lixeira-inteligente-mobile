@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, SafeAreaView, Text, StyleSheet } from "react-native";
 import Product from "../components/Product";
-import {getCatalog} from "../services/api";
+import {getCatalog} from "../services/UserService";
 import { FlatList } from "react-native-gesture-handler";
 import UserContext from "../contexts/UserContext";
 import { ProductProps } from "../types/ProductProps";
