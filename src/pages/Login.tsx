@@ -1,10 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import {useForm} from 'react-hook-form'
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Logo from "../components/Logo";
 import Background from "../components/Background";
 import Header from "../components/header";
-import TextInput from "../components/TextInput";
+import TextField from "../components/TextField";
 import BackButton from "../components/BackButton";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
@@ -18,11 +19,15 @@ import { signin as login } from "../services/UserService";
 export default function signin() {
   const { handleLogin } = useContext(UserContext);
   
-  const [email, setEmail] = useState({ value: "", error: "" });
-  const [password, setPassword] = useState({ value: "", error: "" });
+  
+  const {register, setValue, handleSubmit} = useForm();
+  
+  useEffect(() => {
+    register('email');
+    register('password');
+  },[register])
 
   const navigation = useNavigation();
-
 
   const _storeData = async (token: string) => {
     try {
@@ -32,13 +37,14 @@ export default function signin() {
     }
   };
 
-  async function onLoginPressed() {
-    const data = {
-      email: email.value,
-      password: password.value,
+
+  async function onLoginPressed(data: any) {
+    const body = {
+      email: data.email,
+      password: data.password,
     };
 
-    const token = await login(data);
+    const token = await login(body);
 
     try {
       if (token != null) {
@@ -53,26 +59,19 @@ export default function signin() {
     <Background>
       <Logo />
       <Header> Bem vindo!</Header>
-      <TextInput
-        description
-        label="Email"
+      <TextField
+        placeholder="Email"
         returnKeyType="next"
-        value={email.value}
-        onChangeText={(text: any) => setEmail({ value: text, error: "" })}
-        error={!!email.error}
-        errorText={email.error}
+        onChangeText={(text: any) => setValue('email', text)}
         autoCapitalize="none"
         autoCompleteType="email"
         textContentType="emailAddress"
         keyboardType="email-address"
       />
-      <TextInput
-        label="Senha"
+      <TextField
+        placeholder="Senha"
         returnKeyType="done"
-        value={password.value}
-        onChangeText={(text: any) => setPassword({ value: text, error: "" })}
-        error={!!password.error}
-        errorText={password.error}
+        onChangeText={(text: any) => setValue('password', text)}
         secureTextEntry
       />
       <View style={styles.forgotPassword}>
@@ -82,7 +81,7 @@ export default function signin() {
           <Text style={styles.forgot}>Esqueceu sua senha?</Text>
         </TouchableOpacity>
       </View>
-      <Button style={styles.button} mode="contained" onPress={onLoginPressed}>
+      <Button style={styles.button} mode="contained" onPress={(handleSubmit(onLoginPressed))}>
         Login
       </Button>
       <View style={styles.row}>
