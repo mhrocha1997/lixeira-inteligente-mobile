@@ -11,8 +11,14 @@ import CardView from './CardView';
 import profile from '../assets/profile.png';
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
+import { UserData } from '../types/UserProps';
 
-export default function User(){
+export default function User({
+    name,
+    discards,
+    points,
+    role
+}: UserData){
     return (
         <CardView>
             <View 
@@ -21,14 +27,14 @@ export default function User(){
                 <Image source={profile} style={styles.profileImg}/>
                 <View style={styles.infoView}>
                     <Text style={styles.nameText}>
-                        Flavin do Pineu
+                        {name}
                     </Text>
                     <View style={styles.scoreView}>
                         <Text style={styles.infoText}>
-                            400xp
+                            {points}xp
                         </Text>
                         <Text style={styles.infoText}>
-                            15 Descartes
+                            {discards} Descartes
                         </Text>
                     </View>
                 </View>

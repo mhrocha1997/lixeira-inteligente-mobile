@@ -34,10 +34,8 @@ export default function signin() {
 
   async function onLoginPressed() {
     const data = {
-    //   email: email.value,
-    //   password: password.value,
-      email: "marcelo.rocha@teste.com",
-      password: "senha123",
+      email: email.value,
+      password: password.value,
     };
 
     const token = await login(data);
@@ -53,7 +51,6 @@ export default function signin() {
   }
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
       <Logo />
       <Header> Bem vindo!</Header>
       <TextInput
