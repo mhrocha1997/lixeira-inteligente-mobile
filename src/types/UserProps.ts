@@ -1,6 +1,7 @@
 export type UserData = {
     name: string;
-    quantity: number;
+    discards: number;
     points: number;
     role: string;
+    id?: number
 }

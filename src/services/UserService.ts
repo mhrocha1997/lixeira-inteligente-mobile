@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import UserContext from "../contexts/UserContext";
 import { UserData } from "../types/UserProps";
 import api from "./api";
 
@@ -55,4 +53,12 @@ export async function signup(data: object) {
 		return true;
 	}
 	return false;
+}
+
+export async function getAllUsers(token: string){
+    const response = await api.get('/users')
+    if(response.status == 200){
+        return response.data;
+    }
+    return [] as UserData[];
 }
