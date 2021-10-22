@@ -27,8 +27,6 @@ export const UserProvider = ({ children }: Children) => {
   const [isSigned, setIsSigned] = useState<boolean>(false);
   const [points, setPoints] = useState(0);
   const [role, setRole] = useState("");
-    
-  
 
   useEffect(() => {
     async function authenticate() {
@@ -45,14 +43,16 @@ export const UserProvider = ({ children }: Children) => {
   }, []);
 
   useEffect(() => {
+      console.log("aueba")
     async function fetchUserData(){
       const data = await getUserData(token);
       console.log(data);
       setPoints(data.points);
       setRole(data.role)
     }
+    
     fetchUserData();
-  }, [token, isSigned]);
+  }, []);
 
   function handleLogin(token: string) {
     setToken(token);

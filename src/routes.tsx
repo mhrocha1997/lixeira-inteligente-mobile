@@ -81,35 +81,36 @@ export default function Routes() {
     const adminTabs = (
         <>
             <Tab.Screen
-            name="Controle de Lixeiras"
-            component={TrashControl}
-            options={{
-                tabBarLabel: () => null,
-                tabBarIcon: () => (
-                <Icon 
-                    name='trash-2' 
-                    size={27} 
-                    color="white" 
-                    style={styles.icon}
-                />
-                )
-            }}
+                name="Controle de Lixeiras"
+                component={TrashControl}
+                options={{
+                    tabBarLabel: () => null,
+                    tabBarIcon: () => (
+                    <Icon 
+                        name='trash-2' 
+                        size={27} 
+                        color="white" 
+                        style={styles.icon}
+                    />
+                    )
+                }}
             />
             <Tab.Screen
-            name="Controle de Usuários"
-            component={UserControl}
-            options={{
-                tabBarLabel: () => null,
-                tabBarIcon: () => (
-                <Icon 
-                    name='users' 
-                    size={27} 
-                    color="white" 
-                    style={styles.icon}
-                />
-                )
-            }}
+                name="Controle de Usuários"
+                component={UserControl}
+                options={{
+                    tabBarLabel: () => null,
+                    tabBarIcon: () => (
+                    <Icon 
+                        name='users' 
+                        size={27} 
+                        color="white" 
+                        style={styles.icon}
+                    />
+                    )
+                }}
             />
+            
         </>
     )
 
