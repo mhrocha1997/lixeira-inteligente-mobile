@@ -14,7 +14,7 @@ export async function getUserData(token: string): Promise<UserData> {
 		const userData = {
 			name: data.name,
 			points: data.points,
-			quantity: data.quantity,
+			discards: data.discards,
 			role: data.role,
 		};
 		return userData;
