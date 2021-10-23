@@ -34,7 +34,7 @@ export const UserProvider = ({ children }: Children) => {
         const token = await AsyncStorage.getItem("token");
         const auth = await verifyToken(token);
         setIsSigned(auth);
-        if (token != null) setToken(token)
+        if (auth && token != null) setToken(token)
       } catch (e) {
         console.error("Erro ao ler o token", e);
       }
@@ -43,14 +43,11 @@ export const UserProvider = ({ children }: Children) => {
   }, []);
 
   useEffect(() => {
-      console.log("aueba")
     async function fetchUserData(){
       const data = await getUserData(token);
-      console.log(data);
       setPoints(data.points);
       setRole(data.role)
     }
-    
     fetchUserData();
   }, []);
 

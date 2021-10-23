@@ -1,7 +1,14 @@
-import React from 'react';
-import { KeyboardAvoidingView, StyleSheet } from 'react-native';
+import React, {ReactNode} from 'react';
+import { 
+    KeyboardAvoidingView, 
+    StyleSheet
+} from 'react-native';
 
-export default function Background({ children }){
+type Children = {
+    children: ReactNode
+}
+
+export default function Background({ children }: Children){
     return(
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             {children}

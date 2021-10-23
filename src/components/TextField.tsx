@@ -3,18 +3,21 @@ import {
     View, 
     StyleSheet,
     Text, 
-    TextInput 
-} from 'react-native'
+} from 'react-native';
+import { TextInput as Input  } from 'react-native-paper';
+import colors from '../styles/colors';
 
 
 export default function TextField({ label, ...inputProps}: any){
   
   return (
     <View style={styles.container}>
-        <TextInput
+        <Input
             style={styles.input}    
             {...inputProps}
             placeholderTextColor={'gray'}
+            mode='flat'
+            theme={{colors:{primary: colors.green_light}}}
         />
         <Text style={styles.error}>
             {inputProps.error}

@@ -10,8 +10,8 @@ export async function getUserData(token: string): Promise<UserData> {
 
 	if (response.status == 200) {
 		const data = response.data;
-        console.log(data)
 		const userData = {
+            id: data.id,
 			name: data.name,
 			points: data.points,
 			discards: data.discards,
@@ -56,9 +56,14 @@ export async function signup(data: object) {
 }
 
 export async function getAllUsers(token: string){
-    const response = await api.get('/users')
+    const response = await api.get('/users',
+        {'headers':{
+            'Authorization': `Bearer ${token}`
+        }}
+    );
     if(response.status == 200){
-        return response.data;
+        return response.data.found.users;
+
     }
     return [] as UserData[];
 }

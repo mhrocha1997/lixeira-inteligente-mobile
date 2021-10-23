@@ -61,7 +61,6 @@ export default function Register({navigation} : any){
            auxErrors[error] = errors[error].message;
         })
         setFieldErrors(auxErrors);
-        console.log(fieldErrors);
     },[errors])
 
     async function onSignUpPressed(data: any){
@@ -74,7 +73,6 @@ export default function Register({navigation} : any){
 
         try{
             const signupConfirm = await signup(body);
-            console.log(signupConfirm)
             signupConfirm ?
                 navigation.reset({
                     index: 0,

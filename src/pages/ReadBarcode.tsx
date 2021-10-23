@@ -4,7 +4,7 @@ import { StyleSheet, SafeAreaView, Text, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 
-import api from "../services/UserService";
+import {getAllUsers} from "../services/UserService";
 import UserContext from "../contexts/UserContext";
 
 export default function ReadCodebar() {
