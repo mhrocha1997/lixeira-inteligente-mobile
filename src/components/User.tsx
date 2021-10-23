@@ -17,7 +17,8 @@ export default function User({
     name,
     discards,
     points,
-    role
+    role,
+    id
 }: UserData){
     return (
         <CardView>

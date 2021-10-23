@@ -28,8 +28,6 @@ export default function Routes() {
     
     let { isSigned, role } = useContext(UserContext);
 
-    // isSigned = false;
-
     const commonTabs = (
         <Tab.Screen
             name="Catálogo"

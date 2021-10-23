@@ -9,6 +9,7 @@ export default function UserControl(){
     const [users, setUsers] = useState<UserData[]>([]);
 
     const { token } = useContext(UserContext);
+    
     useEffect(()=>{
         async function fetchUsers(){
             const users_response = await getAllUsers(token);
@@ -26,6 +27,7 @@ export default function UserControl(){
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                     <User
+                        id={item.id}
                         name={item.name}
                         points={item.points}
                         discards={item.discards}

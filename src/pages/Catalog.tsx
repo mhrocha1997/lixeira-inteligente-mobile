@@ -4,28 +4,23 @@ import Product from "../components/Product";
 import { FlatList } from "react-native-gesture-handler";
 import UserContext from "../contexts/UserContext";
 import { ProductProps } from "../types/ProductProps";
-import { getCatalogFake } from "../services/fake_api";
-import colors from "../styles/colors";
 import Icon from "react-native-vector-icons/Feather";
-import { useNavigation } from "@react-navigation/native";
 import NewProduct from "./NewProduct";
+import { getCatalog } from "../services/ProductService";
 
 export default function Catalog() {
     const [products, setProducts] = useState<ProductProps[]>([]);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const { role } = useContext(UserContext);
-    const navigation = useNavigation();
+    let { role, token } = useContext(UserContext);
 
     function handleAddProduct(){
         setModalVisible(true);
     }
 
     useEffect(() => {
-        console.log("role:",role)
         async function fetchProducts(){
-        // let products = await getCatalog();
-        let products = await getCatalogFake();
+        let products = await getCatalog(token);
         setProducts(products);
         }
         fetchProducts();
@@ -37,15 +32,15 @@ export default function Catalog() {
             <FlatList
                 style={{height: '100%'}}
                 data={products}
-                keyExtractor={(item) => item.id_item.toString()}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                 <Product
-                    id_item={item.id_item}
-                    img_base64={item.img_base64}
+                    id_item={item.id}
+                    img_base64={item.imageData}
                     name={item.name}
-                    material={item.material}
+                    material={item.type}
                     points={item.points}
-                    quantity={0}
+                    quantity={item.discards}
                 />
                 )}
             />
@@ -78,7 +73,7 @@ export default function Catalog() {
             <Modal
                 visible={isModalVisible}
                 animationType="slide"
-                transparent={true}
+                transparent={false}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
                     setModalVisible(!isModalVisible);
