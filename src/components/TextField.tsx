@@ -8,7 +8,7 @@ import { TextInput as Input  } from 'react-native-paper';
 import colors from '../styles/colors';
 
 
-export default function TextField({ label, ...inputProps}: any){
+export default function TextField({ label, errorText, ...inputProps}: any){
   
   return (
     <View style={styles.container}>
@@ -19,9 +19,7 @@ export default function TextField({ label, ...inputProps}: any){
             mode='flat'
             theme={{colors:{primary: colors.green_light}}}
         />
-        <Text style={styles.error}>
-            {inputProps.error}
-        </Text>
+        {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
     </View>
   );
 }

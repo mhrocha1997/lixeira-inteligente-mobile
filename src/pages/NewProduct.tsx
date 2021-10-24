@@ -21,7 +21,7 @@ import fonts from '../styles/fonts';
 import { createProduct } from '../services/ProductService';
 import UserContext from '../contexts/UserContext';
 
-export default function NewProduct(){
+export default function NewProduct({callbackFunction}: any){
     const [name, setName] = useState('');
     const [code, setCode] = useState('');
     const [type, setType] = useState('');
@@ -35,7 +35,7 @@ export default function NewProduct(){
           if (Platform.OS !== 'web') {
             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (status !== 'granted') {
-              Alert.alert('Sorry, we need camera roll permissions to make this work!');
+              Alert.alert('É necessário permitir o aplicativo acessar as suas imagens!');
             }
           }
         })();
@@ -46,7 +46,7 @@ export default function NewProduct(){
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 0.5,
+            quality: 0.3,
         });
 
         if (!result.cancelled) {
@@ -83,6 +83,7 @@ export default function NewProduct(){
 
         if(response){
             Alert.alert("Produto criado com sucesso!")
+            callbackFunction();
         } else{
             Alert.alert("Falha no cadastro, tente novamente")
         }

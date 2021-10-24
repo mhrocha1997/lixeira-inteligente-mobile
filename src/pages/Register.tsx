@@ -6,8 +6,6 @@ import {
     View,
 } from 'react-native';
 import {useForm} from 'react-hook-form';
-import * as yup from 'yup';
-import {yupResolver} from '@hookform/resolvers/yup';
 
 import Logo from '../components/Logo';
 import Background from '../components/Background';
@@ -19,60 +17,58 @@ import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 import {signup} from '../services/UserService';
+import Validator from '../utils/Validator';
 
 export default function Register({navigation} : any){
-    const [fieldErrors, setFieldErrors] = useState({
-        'name': '',
-        'email': '',
-        'password': '',
-        'passwordConfirmation': '',
-    })
+    const [ name, setName] = useState({value: '', error: ''})
+    const [ email, setEmail] = useState({value: '', error: ''})
+    const [ password, setPassword] = useState({value: '', error: ''})
+    const [ passwordConfirmation, setPasswordConfirmation] = useState({value: '', error: ''})
 
-    const fieldsValidationSchema = yup.object().shape({
-        name: yup
-        .string()
-        .required('O nome não pode ser vazio'),
-        email: yup
-        .string()
-        .required('O email não pode ser vazio')
-        .email('Digite um email válido'),
-        password: yup
-        .string()
-        .required('A senha não pode ser vazia')
-        .min(6, 'A senha deve conter pelo menos 6 dígitos'),
-        passwordConfirmation: yup
-        .string()
-        .oneOf([yup.ref('password'), null], 'Confirme a sua senha corretamente!')
-      })
 
-    const {register, setValue, handleSubmit, formState: {errors}, clearErrors} = useForm(
-        {resolver: yupResolver(fieldsValidationSchema)});
+    function handleChangeName(name: string){
+        setName({value: name, error: ''});
+    }
 
-    useEffect(()=>{
-        register('name');
-        register('email');
-        register('password');
-        register('passwordConfirmation');
-    },[register])
+    function handleChangeEmail(email: string){
+        if (Validator.isEmail(email)){
+            setEmail({value: email, error: ''});
+        }else{
+            setEmail({value: email, error: 'Digite um e-mail válido!'});
+        }
+    }
 
-    useEffect(()=>{
-        let auxErrors = fieldErrors;
-        Object.keys(errors).forEach((error)=>{
-           auxErrors[error] = errors[error].message;
-        })
-        setFieldErrors(auxErrors);
-    },[errors])
+    function handleChangePassword(password: string){
+        if(Validator.validPassword(password)){
+            setPassword({value: password, error: ''});
 
-    async function onSignUpPressed(data: any){
+        }else{
+            setPassword({value: password, error: 'A sua senha deve conter pelo menos 8 caracteres, incluindo pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial'});
+        }
+    }
+
+    function handleChangePasswordConfirmation(passwordConfirmation: string){
+        if (passwordConfirmation == password.value){
+            setPasswordConfirmation({value: passwordConfirmation, error: ''})
+        }else{
+            setPasswordConfirmation({value: passwordConfirmation, error: 'As senhas devem ser iguais!'})
+        }
+        
+    }
+
+    async function onSignUpPressed(){
         const body = {
-            name: data.name,
-            email: data.email,
-            password: data.password,
-            passwordConfirmation: data.passwordConfirmation
+            name: name.value,
+            email: email.value,
+            password: password.value,
+            passwordConfirmation: passwordConfirmation.value,
         };
+
+        console.log(body)
 
         try{
             const signupConfirm = await signup(body);
+
             signupConfirm ?
                 navigation.reset({
                     index: 0,
@@ -101,35 +97,39 @@ export default function Register({navigation} : any){
             <TextField
                 placeholder="Nome"
                 returnKeyType="next"
-                onChangeText={(text: string) => setValue('name', text)}
-                error={fieldErrors.name}
+                onChangeText={(text: string) => handleChangeName(text)}
+                error={!!name.error}
+                errorText={name.error}
             />
             
             <TextField 
                 placeholder="Email"
                 returnKeyType="next"
-                onChangeText={(text: string) => setValue('email', text)}
-                error={fieldErrors.email}
+                onChangeText={(text: string) => handleChangeEmail(text)}
+                error={!!email.error}
+                errorText={email.error}
             />
             <TextField
                 placeholder="Senha"
                 returnKeyType="next"
-                onChangeText={(text: string) => setValue('password', text)}
+                onChangeText={(text: string) => handleChangePassword(text)}
                 secureTextEntry
-                error={fieldErrors.password}
+                error={!!password.error}
+                errorText={password.error}
             />
 
             <TextField
                 placeholder="Confirme sua senha"
                 returnKeyType="done"
-                onChangeText={(text: string) => setValue('passwordConfirmation', text)}
+                onChangeText={(text: string) => handleChangePasswordConfirmation(text)}
                 secureTextEntry
-                error={fieldErrors.passwordConfirmation}
+                error={!!passwordConfirmation.error}
+                errorText={passwordConfirmation.error}
             />
             
             <Button 
                 mode="contained"
-                onPress={handleSubmit(onSignUpPressed)}
+                onPress={onSignUpPressed}
                 style={{marginTop: 24}}
             >
                 Enviar

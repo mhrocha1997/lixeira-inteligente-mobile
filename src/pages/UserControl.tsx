@@ -14,6 +14,7 @@ export default function UserControl(){
         async function fetchUsers(){
             const users_response = await getAllUsers(token);
             setUsers(users_response);
+            console.log(users_response);
         }
         fetchUsers();
     }, [])

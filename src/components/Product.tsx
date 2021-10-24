@@ -66,11 +66,12 @@ const styles = StyleSheet.create({
   productImage: {
     width: '35%',
     resizeMode: "contain",
+    marginRight: 10,
   },
   descriptionText: {
     fontFamily: fonts.text,
     color: colors.green_text,
-    fontSize: 12,
+    fontSize: 16,
   },
   titleText: {
     color: colors.green_text,
