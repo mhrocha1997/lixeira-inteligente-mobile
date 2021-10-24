@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { View, SafeAreaView, Text, StyleSheet, TouchableOpacity, Modal, Alert } from "react-native";
 import Product from "../components/Product";
 import { FlatList } from "react-native-gesture-handler";
@@ -20,11 +20,15 @@ export default function Catalog() {
 
     useEffect(() => {
         async function fetchProducts(){
-        let products = await getCatalog(token);
-        setProducts(products);
+            let products = await getCatalog(token);
+            setProducts(products);
         }
         fetchProducts();
-    }, []);
+    }, [products]);
+
+    const closeModal = useCallback(event => {
+        setModalVisible(false);
+    },[isModalVisible]);
 
     return (
         <SafeAreaView >
@@ -75,11 +79,12 @@ export default function Catalog() {
                 animationType="slide"
                 transparent={false}
                 onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
                     setModalVisible(!isModalVisible);
                   }}
             >
-                <NewProduct />
+                <NewProduct 
+                    callbackFunction={closeModal}
+                />
             </Modal>
             
         </SafeAreaView>

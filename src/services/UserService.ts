@@ -49,6 +49,7 @@ export async function signin(data: any) {
 
 export async function signup(data: object) {
 	const response = await api.post("/auth/signup", data);
+    console.log(response);
 	if (response.status == 201) {
 		return true;
 	}

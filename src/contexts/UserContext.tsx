@@ -40,16 +40,17 @@ export const UserProvider = ({ children }: Children) => {
       }
     }
     authenticate();
-  }, []);
+  }, [isSigned, token]);
 
   useEffect(() => {
     async function fetchUserData(){
       const data = await getUserData(token);
+      console.log(data)
       setPoints(data.points);
       setRole(data.role)
     }
     fetchUserData();
-  }, []);
+  }, [token]);
 
   function handleLogin(token: string) {
     setToken(token);

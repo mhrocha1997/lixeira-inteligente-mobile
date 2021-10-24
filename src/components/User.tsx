@@ -32,7 +32,7 @@ export default function User({
                     </Text>
                     <View style={styles.scoreView}>
                         <Text style={styles.infoText}>
-                            {points}xp
+                            {points} xp
                         </Text>
                         <Text style={styles.infoText}>
                             {discards} Descartes
