@@ -4,42 +4,28 @@ import {Text, SafeAreaView, Image, View, StyleSheet, FlatList} from 'react-nativ
 import {LinearGradient} from 'expo-linear-gradient';
 
 import UserContext from '../contexts/UserContext';
+import ProductsContext from '../contexts/ProductsContext';
 import Product from '../components/Product'
-import { ProductProps } from '../types/ProductProps';
 import { UserData } from '../types/UserProps';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-import {
-    // getUserInventory,
-    getUserData
-} from '../services/UserService'
-import { getCatalogFake, getUserFake } from '../services/fake_api';
+import { getUserData } from '../services/UserService'
 
 export default function Profile(){
     const [ userData, setUserData] = useState({} as UserData)
-    const [ products, setProducts] = useState<ProductProps[]>([])
 
-    const {token} = useContext(UserContext);
+    const {token, points, discardNumber} = useContext(UserContext);
+    const { discards } = useContext(ProductsContext);
     
     useEffect(() => {
         async function fetchUserData(){
-            // const data = await getUserFake();
             const data = await getUserData(token);
             setUserData(data);
         }
         fetchUserData();
     },[])
-
-    async function getProducts(){
-        // const products = await getUserInventory();
-        const products = await getCatalogFake();
-        setProducts(products);
-    }
-    useEffect(() => {
-      getProducts();
-    },[]);
 
     return (
         <SafeAreaView style={styles.screen}>
@@ -73,7 +59,7 @@ export default function Profile(){
                         <Text 
                             style={styles.details}
                         >
-                            {userData.points} xp
+                            {points} xp
                         </Text>
                     </View>
 
@@ -83,7 +69,7 @@ export default function Profile(){
                         <Text 
                             style={styles.details}
                         >
-                                {userData.quantity} Descartes
+                                {discardNumber} Descartes
                         </Text>
                     </View>
                 </View>
@@ -91,18 +77,18 @@ export default function Profile(){
 
 
             <View>
-            { products!=[] ?(
+            { discards!=[] ?(
                 <FlatList
-                    data={products}
-                    keyExtractor={ (item) => item.id_item.toString()}
+                    data={discards}
+                    keyExtractor={ (item) => item.id.toString()}
                     renderItem={({item}) => (
                         <Product
-                        id_item={item.id_item}
-                        img_base64={item.img_base64}
-                        name={item.name}
-                        material={item.material}
+                        id={item.id}
+                        imageData={item.product.imageData}
+                        name={item.product.name}
+                        type={item.product.type}
                         points={item.points}
-                        quantity={item.quantity}
+                        discards={item.discards}
                         />
                     )}
                 />

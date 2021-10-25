@@ -24,7 +24,7 @@ export default function Catalog() {
             setProducts(products);
         }
         fetchProducts();
-    }, [products]);
+    }, []);
 
     const closeModal = useCallback(event => {
         setModalVisible(false);

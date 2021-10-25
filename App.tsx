@@ -10,6 +10,7 @@ import {
 
 import Routes from './src/routes';
 import {UserProvider} from './src/contexts/UserContext';
+import { ProductsProvider } from './src/contexts/ProductsContext';
 
 export default function App() {
   useFonts({
@@ -19,8 +20,10 @@ export default function App() {
 
   return (
     <UserProvider>
-      <StatusBar hidden/>
-      <Routes />
+        <ProductsProvider>
+            <StatusBar hidden/>
+            <Routes />
+        </ProductsProvider>
     </UserProvider>
   );
 }

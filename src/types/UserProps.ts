@@ -3,5 +3,5 @@ export type UserData = {
     discards: number;
     points: number;
     role: string;
-    id: number
+    id: string;
 }

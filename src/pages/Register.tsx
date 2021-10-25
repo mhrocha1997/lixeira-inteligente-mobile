@@ -64,8 +64,6 @@ export default function Register({navigation} : any){
             passwordConfirmation: passwordConfirmation.value,
         };
 
-        console.log(body)
-
         try{
             const signupConfirm = await signup(body);
 
