@@ -22,18 +22,22 @@ export async function addDiscard(
 }
 
 export async function getInventory(token: string, userId: string) {
-	const url = `/inventory/${userId}`;
-
-	const response = await api.get(url, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-
-    if (response.status == 200){
-        return response.data.inventory;
-    }else{
-        return [];
+    try{
+        const url = `/inventory/${userId}`;
+    
+        const response = await api.get(url, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    
+        if (response.status == 200){
+            return response.data.inventory;
+        }else{
+            return [];
+        }
+    }catch(e){
+        console.error("Error on getInventory", e);
     }
 
 }

@@ -38,25 +38,25 @@ export default function signin() {
 	};
 
 	async function onLoginPressed() {
-		const body = {
-			email,
+        const body = {
+            email,
 			password,
 		};
-
+        
 		const token = await login(body);
 
         if (!token){
             Alert.alert("E-mail ou senha incorretos! Certifique-se que inseriu as credenciais corretamente")
+        }else{
+            try {
+                if (token != null) {
+                    _storeData(token);
+                    handleLogin(token);
+                }
+            } catch (err) {
+                console.error(err);
+            }
         }
-
-		try {
-			if (token != null) {
-				_storeData(token);
-				handleLogin(token);
-			}
-		} catch (err) {
-			console.error(err);
-		}
 	}
 	return (
 		<Background>

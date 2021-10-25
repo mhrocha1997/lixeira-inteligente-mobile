@@ -31,17 +31,23 @@ export const UserProvider = ({ children }: Children) => {
 
 	useEffect(() => {
 		async function authenticate() {
-			try {
-				const token = await AsyncStorage.getItem("token");
-				const auth = await verifyToken(token);
-				setIsSigned(auth);
-				if (auth && token != null) setToken(token);
+            setReloadUserInfo(false);
+            try {
+                const token = await AsyncStorage.getItem("token");
+                console.log("chama", token)
+                if (token){
+                    console.log("chama")
+                    const auth = await verifyToken(token);
+                    setIsSigned(auth);
+                    if (auth) setToken(token);
+                    setReloadUserInfo(true);
+                }
 			} catch (e) {
 				console.error("Erro ao ler o token", e);
 			}
 		}
 		authenticate();
-	}, [isSigned, token]);
+	}, []);
 
 	async function fetchUserData() {
 		const data = await getUserData(token);
