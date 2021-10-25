@@ -12,7 +12,7 @@ import Register from "./pages/Register";
 import Catalog from "./pages/Catalog";
 import ReadBarcode from "./pages/ReadBarcode";
 import Profile from "./pages/Profile";
-import TrashControl from "./pages/TrashControl";
+import ContainerControl from "./pages/ContainerControl";
 import UserControl from "./pages/UserControl";
 
 import colors from "./styles/colors";
@@ -80,7 +80,7 @@ export default function Routes() {
         <>
             <Tab.Screen
                 name="Controle de Lixeiras"
-                component={TrashControl}
+                component={ContainerControl}
                 options={{
                     tabBarLabel: () => null,
                     tabBarIcon: () => (
@@ -130,7 +130,7 @@ export default function Routes() {
             }}
             >
             {commonTabs}
-            {roleToScreen[role.toLowerCase()]}
+            {role ? roleToScreen[role.toLowerCase()]: null}
             
             </Tab.Navigator>
         ) : (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     View, 
     Text, 
@@ -16,14 +16,14 @@ import location from '../assets/location.png';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import Icon from 'react-native-vector-icons/Feather';
-import { TrashProps } from '../types/TrashProps';
+import { ContainerProps } from '../types/ContainerProps';
 
 export default function Thrash({
-    title,
-    capacity,
-    occupation,
-    status,
-}: TrashProps){
+    name,
+    totalCapacity,
+    usedCapacity,
+    status
+}: ContainerProps){
     const switchImage: any = {
         ok: trashOk,
         warning: trashWarning,
@@ -40,12 +40,12 @@ export default function Thrash({
             </View>
             <View style={styles.infoView}>
                 <View style={styles.titleView}>
-                    <Text style={styles.titleText}>{title}</Text>
+                    <Text style={styles.titleText}>{name}</Text>
                     <Icon name='map-pin' size={26}/>
                 </View>
                 <View style={styles.descriptionView}>
-                    <Text style={styles.descriptionText}>Capacidade Total: {capacity}</Text>
-                    <Text style={styles.descriptionText}>Ocupação: {occupation}</Text>
+                    <Text style={styles.descriptionText}>Capacidade Total: {totalCapacity}</Text>
+                    <Text style={styles.descriptionText}>Ocupação: {usedCapacity}</Text>
                 </View> 
             </View>
         </CardView>

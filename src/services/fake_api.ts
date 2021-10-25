@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TrashProps } from '../types/TrashProps';
+import { ContainerProps } from '../types/ContainerProps';
 import { UserData } from '../types/UserProps';
 
 const api = axios.create({
