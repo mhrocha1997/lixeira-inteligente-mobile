@@ -1,12 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Logo from "../components/Logo";
 import Background from "../components/Background";
 import Header from "../components/header";
 import TextField from "../components/TextField";
-import BackButton from "../components/BackButton";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
 
@@ -46,6 +44,10 @@ export default function signin() {
 		};
 
 		const token = await login(body);
+
+        if (!token){
+            Alert.alert("E-mail ou senha incorretos! Certifique-se que inseriu as credenciais corretamente")
+        }
 
 		try {
 			if (token != null) {

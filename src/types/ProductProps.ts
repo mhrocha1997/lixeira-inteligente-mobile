@@ -1,8 +1,15 @@
 export type ProductProps = {
-    id_item: string; 
-    img_base64: string;
+    id: string; 
+    imageData: string;
     name: string;
-    material: string;
+    type: string;
     points: number;
-    quantity: number;
+    discards: number;
+}
+
+export type Inventoryprops = {
+    id: string,
+    points: number,
+    discards: number,
+    product: ProductProps,
 }

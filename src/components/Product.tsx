@@ -6,26 +6,26 @@ import { ProductProps } from "../types/ProductProps";
 import CardView from "./CardView";
 
 export default function Product({
-  img_base64,
-  material,
+  imageData,
+  type,
   name,
   points,
-  quantity,
+  discards,
 }: ProductProps) {
-  let base64Image = `data:image/png;base64,${img_base64}`;
+  let base64Image = `data:image/png;base64,${imageData}`;
   return (
     <CardView>
       <Image source={{ uri: base64Image }} style={styles.productImage} />
         <View style={styles.infoView}>
           <Text style={styles.titleText}>{name}</Text>
-          <Text style={styles.descriptionText}>Material: {material}</Text>
+          <Text style={styles.descriptionText}>Material: {type}</Text>
           <View
             style={{flexDirection: 'row', alignItems:'flex-end', flex: 1}}
           >
             <Text style={styles.pointsText}>{points}xp</Text>
             {
-              quantity ? (
-                <Text style={styles.pointsText}>{quantity} Descartes</Text>
+              discards ? (
+                <Text style={styles.pointsText}>{discards} Descartes</Text>
               ):undefined
             }
           </View>

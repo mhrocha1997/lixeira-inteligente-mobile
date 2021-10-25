@@ -1,4 +1,3 @@
-import { ProductProps } from '../types/ProductProps';
 import api from './api';
 
 export async function getCatalog(token: string){
@@ -21,9 +20,20 @@ export async function createProduct(token: string, data: Object){
         }}
     );
     if (response.status == 201){
-        console.log("deu bom")
         return true;
     }
-    console.log("chegou aqui?")
     return false;
+}
+
+export async function getProductByCode(token: string, code: string){
+    const url = `/products/code/${code}`;
+    const response = await api.get(url,
+        {'headers': {
+            'Authorization': `Bearer ${token}`,
+    }});
+    if (response.status == 200){
+        return response.data.product.id;
+    }
+    return false;
+
 }
