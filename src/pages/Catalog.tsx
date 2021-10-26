@@ -5,7 +5,7 @@ import { FlatList } from "react-native-gesture-handler";
 import UserContext from "../contexts/UserContext";
 import { ProductProps } from "../types/ProductProps";
 import Icon from "react-native-vector-icons/Feather";
-import NewProduct from "./NewProduct";
+import NewProduct from "../components/NewProduct";
 import { getCatalog } from "../services/ProductService";
 
 export default function Catalog() {
@@ -39,12 +39,12 @@ export default function Catalog() {
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                 <Product
-                    id_item={item.id}
-                    img_base64={item.imageData}
+                    id={item.id}
+                    imageData={item.imageData}
                     name={item.name}
-                    material={item.type}
+                    type={item.type}
                     points={item.points}
-                    quantity={item.discards}
+                    discards={item.discards}
                 />
                 )}
             />

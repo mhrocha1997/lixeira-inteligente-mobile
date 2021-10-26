@@ -3,5 +3,5 @@ export type ContainerProps = {
     name:string,
     totalCapacity: string,
     usedCapacity: string,
-    status: string,
+    capacityStatus: string,
 }
