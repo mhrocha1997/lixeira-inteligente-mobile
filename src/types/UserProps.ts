@@ -4,4 +4,5 @@ export type UserData = {
     points: number;
     role: string;
     id: string;
+    profileImage: string,
 }

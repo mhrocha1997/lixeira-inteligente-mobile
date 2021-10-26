@@ -32,6 +32,7 @@ export default function UserControl(){
                         points={item.points}
                         discards={item.discards}
                         role={item.role}
+                        profileImage={item.profileImage}
                     />
                     )}
                 />
