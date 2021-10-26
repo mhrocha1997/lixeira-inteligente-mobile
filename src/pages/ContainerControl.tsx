@@ -1,23 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, FlatList } from 'react-native';
-import Trash from '../components/Trash';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { View, FlatList, TouchableOpacity, Modal } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
+import NewContainer from '../components/NewContainer';
+import Container from '../components/Container';
 import UserContext from '../contexts/UserContext';
-import getAllContainers from '../services/ContainerService';
+import {getAllContainers} from '../services/ContainerService';
 import { ContainerProps } from '../types/ContainerProps';
 
 export default function ContainerControl(){
     const [containers, setContainers] = useState<ContainerProps[]>([]);
+    const [isModalVisible, setModalVisible] = useState(false);
 
     const {token} = useContext(UserContext);
 
+    async function fetchcontainers(){
+        const containers = await getAllContainers(token);
+        setContainers(containers);
+        console.log(containers)
+    }
+
     useEffect(()=>{
-        async function fetchcontainers(){
-            const containers = await getAllContainers(token);
-            setContainers(containers);
-        }
         fetchcontainers();
     }, []);
-    
+
+    function handleAddContainer(){
+        setModalVisible(true);
+    }
+    const closeModal = useCallback(event => {
+        setModalVisible(false);
+        fetchcontainers();
+    },[isModalVisible]);
+
     return (
         <View style={{flex: 1}}>
             <FlatList
@@ -25,16 +38,46 @@ export default function ContainerControl(){
                 data = {containers}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({item}) => (
-
-                    <Trash
+                    <Container
                         id={item.id}
                         name={item.name}
                         totalCapacity={item.totalCapacity}
                         usedCapacity={item.usedCapacity}
-                        status={item.status}
+                        capacityStatus={item.capacityStatus}
                     />
                 )}
             />
+            <TouchableOpacity
+                    style={{
+                      borderWidth: 1,
+                      borderColor: 'rgba(0,0,0,0.2)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 70,
+                      position: 'absolute',
+                      bottom: 10,
+                      right: 10,
+                      height: 70,
+                      backgroundColor: '#fff',
+                      borderRadius: 100,
+                    }}
+                    onPress={handleAddContainer}
+                >
+                    <Icon name='plus' size={30} color='#01a699' />
+                </TouchableOpacity>
+
+            <Modal
+                visible={isModalVisible}
+                animationType="slide"
+                transparent={false}
+                onRequestClose={() => {
+                    setModalVisible(!isModalVisible);
+                  }}
+            >
+                <NewContainer
+                    callbackFunction={closeModal}
+                />
+            </Modal>
         </View>
     );
 }

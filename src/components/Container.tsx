@@ -18,11 +18,11 @@ import fonts from '../styles/fonts';
 import Icon from 'react-native-vector-icons/Feather';
 import { ContainerProps } from '../types/ContainerProps';
 
-export default function Thrash({
+export default function Container({
     name,
     totalCapacity,
     usedCapacity,
-    status
+    capacityStatus
 }: ContainerProps){
     const switchImage: any = {
         ok: trashOk,
@@ -34,7 +34,7 @@ export default function Thrash({
         <CardView>
             <View style={{width: '35%'}}>
                 <Image 
-                    source={switchImage[status]} 
+                    source={switchImage[capacityStatus]} 
                     style={styles.trashImg}
                 />
             </View>
