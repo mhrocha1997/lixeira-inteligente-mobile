@@ -2,52 +2,42 @@ import { UserData } from "../types/UserProps";
 import api from "./api";
 
 export async function getUserData(token: string): Promise<UserData> {
-   
-    try {
-        const response = await api.get("/auth/me", {
-            'headers': {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-    
-        if (response.status == 200) {
-            const data = response.data;
-            const userData = {
-                id: data.id,
-                name: data.name,
-                points: data.points,
-                discards: data.discards,
-                role: data.role,
-            };
-            return userData;
-        } else {
-            return {} as UserData;
-        }
-    } catch(e){
-        console.error("Error on getUserData",e);
-        return {} as UserData;
-    }
+	const response = await api.get("/auth/me", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+    console.log(response.data)
+
+	if (response.status == 200) {
+		const data = response.data;
+		const userData = {
+            id: data.id,
+			name: data.name,
+			points: data.points,
+			discards: data.discards,
+			role: data.role,
+            profileImage: data.imageData,
+		};
+		return userData;
+	} else {
+		return {} as UserData;
+	}
 }
 
 export async function verifyToken(token: string | null): Promise<boolean> {
-    try{
-        if (token !== null) {
-            
-            const response = await api.get("/auth/me", {
-                'headers': { Authorization: `Bearer ${token}` },
-            });
-            if (response.status == 200) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-
-    }catch(e){
-        console.error(e);
-        return false;
-    }
+	if (token !== null) {
+		const response = await api.get("/auth/me", {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+        console.log(response.data)
+		if (response.status == 200) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return false;
 }
 
 export async function signin(data: any) {

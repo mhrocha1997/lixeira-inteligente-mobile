@@ -53,6 +53,7 @@ export const UserProvider = ({ children }: Children) => {
 		const data = await getUserData(token);
 		setPoints(data.points);
 		setRole(data.role);
+        console.log(role,data.role)
 		setUserId(data.id);
         setDiscardNumber(data.discards);
         setReloadUserInfo(false);

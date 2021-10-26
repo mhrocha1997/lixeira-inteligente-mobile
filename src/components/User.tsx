@@ -18,14 +18,22 @@ export default function User({
     discards,
     points,
     role,
-    id
+    id,
+    profileImage
 }: UserData){
+    const base64Image = `data:image/png;base64,${profileImage}`;
     return (
         <CardView>
             <View 
                 style={styles.profileView}
             >
-                <Image source={profile} style={styles.profileImg}/>
+                {
+                
+                profileImage ? (
+                    <Image source={{ uri: base64Image }} style={styles.profileImg}/>
+                    )  : (
+                    <Image source={profile} style={styles.profileImg}/>
+                )}
                 <View style={styles.infoView}>
                     <Text style={styles.nameText}>
                         {name}

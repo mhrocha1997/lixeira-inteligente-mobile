@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {
+    Alert,
+    Image,
+    Platform,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from 'react-native';
-import {useForm} from 'react-hook-form';
+
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 import Logo from '../components/Logo';
 import Background from '../components/Background';
@@ -15,16 +20,42 @@ import Button from '../components/Button';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import profile from '../assets/profile.png';
 
 import {signup} from '../services/UserService';
 import Validator from '../utils/Validator';
+import Icon from 'react-native-vector-icons/Feather';
 
 export default function Register({navigation} : any){
     const [ name, setName] = useState({value: '', error: ''})
     const [ email, setEmail] = useState({value: '', error: ''})
+    const [image, setImage] = useState('');
     const [ password, setPassword] = useState({value: '', error: ''})
     const [ passwordConfirmation, setPasswordConfirmation] = useState({value: '', error: ''})
 
+    useEffect(() => {
+        (async () => {
+          if (Platform.OS !== 'web') {
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== 'granted') {
+              Alert.alert('É necessário permitir o aplicativo acessar as suas imagens!');
+            }
+          }
+        })();
+    }, []);
+
+    const pickImage = async () =>{
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 0.1,
+        });
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    }
 
     function handleChangeName(name: string){
         setName({value: name, error: ''});
@@ -56,12 +87,28 @@ export default function Register({navigation} : any){
         
     }
 
+    async function imageToBase64(){
+        if (image){
+            console.log("Convertendo")
+            const base64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+            return base64;
+        }else{
+            return '  '
+        }
+    }
+
     async function onSignUpPressed(){
+        
+        const base64 = await imageToBase64();
+
+        console.log(base64)
+
         const body = {
             name: name.value,
             email: email.value,
             password: password.value,
             passwordConfirmation: passwordConfirmation.value,
+            imageData: base64,
         };
 
         try{
@@ -91,7 +138,28 @@ export default function Register({navigation} : any){
         <Background>
             <Logo />
             <Header> Cadastre-se e ganhe recompensas pelo seu lixo!</Header>
-
+            <View
+                style={styles.imgUploadView}
+            >
+                <TouchableOpacity
+                    onPress={pickImage}
+                    style={styles.button}
+                >
+                    {image? (
+                            <Image source={{ uri: image }} style={{ resizeMode: 'cover', width: '100%', height: '100%'}} />
+                        ):
+                            <Icon 
+                                name="upload"
+                                size={32}
+                            />
+                    }
+                </TouchableOpacity>
+                <Text
+                    style={{fontFamily: fonts.text,color: colors.green_text, fontSize: 16}}
+                >
+                    Foto de Perfil
+                </Text>
+            </View>
             <TextField
                 placeholder="Nome"
                 returnKeyType="next"
@@ -158,5 +226,21 @@ const styles = StyleSheet.create({
     login: {
         flexDirection: 'row',
         fontFamily: fonts.text,
+    },
+    imgUploadView: {
+        width: '100%', 
+        justifyContent: 'flex-start', 
+        flexDirection: 'row',
+        alignItems: 'center',
+        
+    },
+    button: {
+        backgroundColor: colors.background_gray_light,
+        borderRadius: 10,
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 10,
     },
   })
