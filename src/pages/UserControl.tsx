@@ -8,10 +8,11 @@ import UserContext from '../contexts/UserContext';
 export default function UserControl(){
     const [users, setUsers] = useState<UserData[]>([]);
 
-    const { token } = useContext(UserContext);
+    const { getToken } = useContext(UserContext);
     
     useEffect(()=>{
         async function fetchUsers(){
+            const token = await getToken();
             const users_response = await getAllUsers(token);
             setUsers(users_response);
         }

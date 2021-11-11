@@ -13,7 +13,7 @@ export default function ReadCodebar() {
 	const [hasPermission, setHasPermission] = useState(true);
 	const [isScanned, setIsScanned] = useState(false);
 
-	const { token, userId, handleUserInfoUpdate } = useContext(UserContext);
+	const { getToken, userId, handleUserInfoUpdate } = useContext(UserContext);
     const { handleDiscardSucceeded } = useContext(ProductsContext);
 
 	const navigation = useNavigation();
@@ -32,6 +32,7 @@ export default function ReadCodebar() {
 		setIsScanned(true);
 
 		try {
+            const token = await getToken()
 			const productId = await getProductByCode(token, code);
             
             if (!Boolean(productId)){

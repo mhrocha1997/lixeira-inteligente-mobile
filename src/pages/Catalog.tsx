@@ -12,7 +12,7 @@ export default function Catalog() {
     const [products, setProducts] = useState<ProductProps[]>([]);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    let { role, token } = useContext(UserContext);
+    let { role, getToken } = useContext(UserContext);
 
     function handleAddProduct(){
         setModalVisible(true);
@@ -20,7 +20,8 @@ export default function Catalog() {
 
     useEffect(() => {
         async function fetchProducts(){
-            let products = await getCatalog(token);
+            const token = await getToken();
+            const products = await getCatalog(token);
             setProducts(products);
         }
         fetchProducts();

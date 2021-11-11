@@ -7,7 +7,6 @@ export async function getUserData(token: string): Promise<UserData> {
 			Authorization: `Bearer ${token}`,
 		},
 	});
-    console.log(response.data)
 
 	if (response.status == 200) {
 		const data = response.data;
@@ -30,7 +29,6 @@ export async function verifyToken(token: string | null): Promise<boolean> {
 		const response = await api.get("/auth/me", {
 			headers: { Authorization: `Bearer ${token}` },
 		});
-        console.log(response.data)
 		if (response.status == 200) {
 			return true;
 		} else {
@@ -42,9 +40,7 @@ export async function verifyToken(token: string | null): Promise<boolean> {
 
 export async function signin(data: any) {
     try {
-        console.log('ablubé das ideia');
         const response = await api.post("/auth/signin", data);
-        console.log("response:", response)
         if (response.status == 201) {
             const { token } = response.data;
             return token;

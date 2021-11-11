@@ -89,7 +89,6 @@ export default function Register({navigation} : any){
 
     async function imageToBase64(){
         if (image){
-            console.log("Convertendo")
             const base64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
             return base64;
         }else{
@@ -100,8 +99,6 @@ export default function Register({navigation} : any){
     async function onSignUpPressed(){
         
         const base64 = await imageToBase64();
-
-        console.log(base64)
 
         const body = {
             name: name.value,
