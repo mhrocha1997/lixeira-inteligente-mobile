@@ -19,9 +19,11 @@ export const ProductsProvider = ({children}: Children) => {
     const [reloadInventory, setReload] = useState(true);
     const [ discards, setDiscards] = useState<Inventoryprops[]>([]);
 
-    const {token, userId} = useContext(UserContext);
+    const {getToken, getUserId} = useContext(UserContext);
 
     async function setInventory(){
+        const userId = await getUserId();
+        const token = await getToken();
         const inventory = await getInventory(token, userId);
         setDiscards(inventory)
         setReload(false);
@@ -31,7 +33,7 @@ export const ProductsProvider = ({children}: Children) => {
         if(reloadInventory){
             setInventory();
         }
-    },[token, userId, reloadInventory]);
+    },[reloadInventory]);
 
     function handleDiscardSucceeded(){
         setReload(true);

@@ -27,7 +27,6 @@ export async function createContainer(token: string, data: Object) {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-        console.log(response)
 		if (response.status == 201) {
 			return true;
 		} else {

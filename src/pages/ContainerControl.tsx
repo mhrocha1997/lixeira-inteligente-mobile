@@ -11,12 +11,12 @@ export default function ContainerControl(){
     const [containers, setContainers] = useState<ContainerProps[]>([]);
     const [isModalVisible, setModalVisible] = useState(false);
 
-    const {token} = useContext(UserContext);
+    const {getToken} = useContext(UserContext);
 
     async function fetchcontainers(){
+        const token = await getToken();
         const containers = await getAllContainers(token);
         setContainers(containers);
-        console.log(containers)
     }
 
     useEffect(()=>{

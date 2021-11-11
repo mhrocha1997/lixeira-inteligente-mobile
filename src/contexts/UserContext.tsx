@@ -16,6 +16,8 @@ type UserContext = {
 	role: string;
 	userId: string;
     handleUserInfoUpdate: () => void;
+    getToken: () => Promise<string>;
+    getUserId: () => Promise<string>;
 };
 
 const UserContext = createContext({} as UserContext);
@@ -32,35 +34,62 @@ export const UserProvider = ({ children }: Children) => {
 	useEffect(() => {
 		async function authenticate() {
             setReloadUserInfo(false);
-            try {
-                const token = await AsyncStorage.getItem("token");
-                console.log("chama", token)
-                if (token){
-                    console.log("chama")
-                    const auth = await verifyToken(token);
-                    setIsSigned(auth);
-                    if (auth) setToken(token);
-                    setReloadUserInfo(true);
-                }
-			} catch (e) {
-				console.error("Erro ao ler o token", e);
-			}
+            readToken();
+            
 		}
 		authenticate();
 	}, []);
 
+
+    async function getToken(){
+        if (token){
+            return token;
+        }
+        return await readToken();
+    }
+
+    async function getUserId(){
+        if(userId){
+            return userId
+        }
+        const userData = await fetchUserData();
+        setReloadUserInfo(false)
+        return userData.id;
+    }
+
+    async function readToken(){
+        try {
+            const stored_token = await AsyncStorage.getItem("token");
+            if (stored_token){
+                const auth = await verifyToken(stored_token);
+                setIsSigned(auth);
+                if (auth) {
+                    setToken(stored_token);
+                    setReloadUserInfo(true);
+                    return stored_token;
+                }
+                
+            }
+            return "";
+            
+        } catch (e) {
+            console.error("Erro ao ler o token", e);
+            return "";
+        }
+    }
 	async function fetchUserData() {
-		const data = await getUserData(token);
+        const stored_token = await getToken();
+		const data = await getUserData(stored_token);
 		setPoints(data.points);
 		setRole(data.role);
-        console.log(role,data.role)
 		setUserId(data.id);
         setDiscardNumber(data.discards);
         setReloadUserInfo(false);
+        return data;
 	}
 	useEffect(() => {
         if(reloadUserInfo) fetchUserData();
-	}, [token, reloadUserInfo]);
+	}, [reloadUserInfo]);
 
 	function handleUserInfoUpdate() {
 		setReloadUserInfo(true);
@@ -73,7 +102,7 @@ export const UserProvider = ({ children }: Children) => {
 
 	return (
 		<UserContext.Provider
-			value={{ isSigned, token, points, discardNumber, handleLogin, role, userId, handleUserInfoUpdate }}
+			value={{ isSigned, token, points, discardNumber, handleLogin, role, userId, handleUserInfoUpdate, getToken, getUserId }}
 		>
 			{children}
 		</UserContext.Provider>

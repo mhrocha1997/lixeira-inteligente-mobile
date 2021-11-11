@@ -16,11 +16,12 @@ import { getUserData } from '../services/UserService'
 export default function Profile(){
     const [ userData, setUserData] = useState({} as UserData)
 
-    const {token, points, discardNumber} = useContext(UserContext);
+    const {getToken, points, discardNumber} = useContext(UserContext);
     const { discards } = useContext(ProductsContext);
     
     useEffect(() => {
         async function fetchUserData(){
+            const token = await getToken();
             const data = await getUserData(token);
             setUserData(data);
         }

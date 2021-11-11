@@ -4,6 +4,7 @@ import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 import { ProductProps } from "../types/ProductProps";
 import CardView from "./CardView";
+import base64 from '../utils/base64';
 
 export default function Product({
   imageData,
@@ -12,26 +13,22 @@ export default function Product({
   points,
   discards,
 }: ProductProps) {
-  let base64Image = `data:image/png;base64,${imageData}`;
-  return (
-    <CardView>
-      <Image source={{ uri: base64Image }} style={styles.productImage} />
-        <View style={styles.infoView}>
-          <Text style={styles.titleText}>{name}</Text>
-          <Text style={styles.descriptionText}>Material: {type}</Text>
-          <View
-            style={{flexDirection: 'row', alignItems:'flex-end', flex: 1}}
-          >
-            <Text style={styles.pointsText}>{points}xp</Text>
-            {
-              discards ? (
-                <Text style={styles.pointsText}>{discards} Descartes</Text>
-              ):undefined
-            }
-          </View>
-        </View>
-    </CardView>
-  );
+    const base64Image = base64.useBase64(imageData);
+	return (
+		<CardView>
+			<Image source={{ uri: base64Image }} style={styles.productImage} />
+			<View style={styles.infoView}>
+				<Text style={styles.titleText}>{name}</Text>
+				<Text style={styles.descriptionText}>Material: {type}</Text>
+				<View style={{ flexDirection: "row", alignItems: "flex-end", flex: 1 }}>
+					<Text style={styles.pointsText}>{points}xp</Text>
+					{discards ? (
+						<Text style={styles.pointsText}>{discards} Descartes</Text>
+					) : undefined}
+				</View>
+			</View>
+		</CardView>
+	);
 }
 
 const styles = StyleSheet.create({
