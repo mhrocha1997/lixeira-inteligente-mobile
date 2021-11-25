@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { 
     View, 
     Text, 
@@ -18,15 +18,64 @@ import Icon from 'react-native-vector-icons/Feather';
 import { ContainerProps } from '../types/ContainerProps';
 import { Card } from 'react-native-paper';
 import UserContext from '../contexts/UserContext';
-import { getLocationLink } from '../services/ContainerService';
+import { getContainer } from '../services/ContainerService';
 
 export default function Container({
     id,
     name,
     totalCapacity,
     usedCapacity,
-    capacityStatus
+    capacityStatus,
+    updatedAt,
+    location
 }: ContainerProps){
+    const [usedCapacityState, setUsedCapacity] = useState(usedCapacity);
+    const [lastActivity, setActivity] = useState(0);
+    const [timeType, setTimeType] = useState('');
+
+    function updateActivity(updatedAt: string){
+        const lastUpdate = new Date(updatedAt);
+        lastUpdate.setHours(lastUpdate.getHours() - 3);
+        
+        const now = new Date();
+
+        const delta = now.getTime() - lastUpdate.getTime();
+        const days = Math.round(delta/(1000*60*60*24));
+        
+        if (days < 1){
+            let hours = Math.round(delta/(1000*60*60));
+            if(hours<1){
+                let minutes = Math.round(delta/(1000*60));
+                setActivity(minutes);
+                if ( minutes == 1){
+                    setTimeType('minuto');
+                }else{
+                    setTimeType('minutos');
+                }
+            }else{
+                setActivity(hours);
+
+                if(hours == 1){
+                    setTimeType('hora');
+                }else{
+                    setTimeType('horas');
+                }
+            }
+        }else{
+            setActivity(days);
+            if (days == 1) {
+                setTimeType('dia')
+            }else{
+                setTimeType('dias')
+            }
+        }
+
+    }
+
+    useEffect(() => {
+        updateActivity(updatedAt);
+    }, [])
+
     const switchImage: any = {
         ok: trashOk,
         warning: trashWarning,
@@ -35,11 +84,14 @@ export default function Container({
     const {getToken} = useContext(UserContext);
 
     async function locateContainer(){
-        const token = await getToken();
-        console.log("token", token )
-        const location = await getLocationLink(id, token);
         const query = `${location.street} ${location.district} ${location.city} ${location.state} ${location.cep}`
         Linking.openURL(`https://maps.google.com?q=${query}`);
+    }
+
+    async function checkActivity(){
+        const token = await getToken();
+        const container = await getContainer(id, token);
+        updateActivity(container.updatedAt)
     }
 
     return (
@@ -57,10 +109,12 @@ export default function Container({
                 <View style={styles.buttonsView}>
                     <Card
                         style={styles.interactCards}
+                        onPress={checkActivity}
                     >
                         <View style={styles.activityCard}>
                             <Icon name='activity' size={24} color='#2D7B5A'/>
-                            <Text style={styles.textCards}>2 horas {"\n"} atrás</Text>
+
+                            <Text style={styles.textCards}>{lastActivity} {timeType} {"\n"} atrás</Text>
 
                         </View>
                     </Card>
@@ -80,7 +134,7 @@ export default function Container({
 
                 <View style={styles.descriptionView}>
                     <Text style={styles.descriptionText}>Capacidade Total: {totalCapacity}</Text>
-                    <Text style={styles.descriptionText}>Ocupação: {usedCapacity}</Text>
+                    <Text style={styles.descriptionText}>Ocupação: {usedCapacity}%</Text>
                 </View> 
             </View>
         </CardView>
@@ -107,7 +161,7 @@ const styles = StyleSheet.create({
     titleText: {
         color: colors.green_text,
         fontWeight: "bold",
-        fontSize: 20,
+        fontSize: 24,
         marginBottom: 5,
         fontFamily: fonts.title,
     },
@@ -118,7 +172,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         alignContent: 'center',
-        marginVertical: 2,
+        marginVertical: 8,
     },
     interactCards:{
         height: '100%',
@@ -151,7 +205,7 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     textCards: {
-        fontSize: 15,
+        fontSize: 16,
         fontFamily: fonts.text,
         color: colors.green_text,
     },
@@ -166,6 +220,6 @@ const styles = StyleSheet.create({
     descriptionText: {
         fontFamily: fonts.text,
         color: colors.green_text,
-        fontSize: 18,
+        fontSize: 20,
     },
 })

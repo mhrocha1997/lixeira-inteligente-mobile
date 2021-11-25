@@ -37,7 +37,7 @@ export async function createContainer(token: string, data: Object) {
 		return false;
 	}
 }
-export async function getLocationLink(id: string, token: string){
+export async function getContainer(id: string, token: string): Promise<ContainerProps> {
     try{
         const response = await api.get(`/containers/${id}`, {
             headers: {
@@ -45,11 +45,11 @@ export async function getLocationLink(id: string, token: string){
             }
         })
         if (response.status == 200){
-            const location = response.data.container.location;
-            return location;
+            const container = response.data.container;
+            return container as ContainerProps;
         }
     }catch(e){
         console.error("Error on getLocationLink", e);
-        return ""
     }
+    return { } as ContainerProps
 }

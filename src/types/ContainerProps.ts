@@ -4,4 +4,12 @@ export type ContainerProps = {
     totalCapacity: string,
     usedCapacity: string,
     capacityStatus: string,
+    updatedAt: string;
+    location?: {
+        cep: string;
+        street: string;
+        district: string;
+        city: string;
+        state: string;
+    };
 }
