@@ -49,7 +49,7 @@ export async function getContainer(id: string, token: string): Promise<Container
             return container as ContainerProps;
         }
     }catch(e){
-        console.error("Error on getLocationLink", e);
+        console.error("Error on getContainer", e);
     }
     return { } as ContainerProps
 }

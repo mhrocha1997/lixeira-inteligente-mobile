@@ -4,9 +4,12 @@ import {
     Text, 
     StyleSheet, 
     Image,
-    Linking
+    Linking,
 } from 'react-native';
 import CardView from './CardView';
+import * as Notifications from 'expo-notifications';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 import trashOk from '../assets/trashOk.png';
 import trashWarning from '../assets/trashWarning.png';
@@ -15,10 +18,20 @@ import trashAlert from '../assets/trashAlert.png';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import Icon from 'react-native-vector-icons/Feather';
+
 import { ContainerProps } from '../types/ContainerProps';
 import { Card } from 'react-native-paper';
 import UserContext from '../contexts/UserContext';
+
 import { getContainer } from '../services/ContainerService';
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+});
 
 export default function Container({
     id,
@@ -30,46 +43,76 @@ export default function Container({
     location
 }: ContainerProps){
     const [usedCapacityState, setUsedCapacity] = useState(usedCapacity);
+    const [capacityState, setCapacityState] = useState(capacityStatus);
     const [lastActivity, setActivity] = useState(0);
     const [timeType, setTimeType] = useState('');
+
+    
+    async function pushNotification(usedCapacity: number){
+        const identifier = await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Lixeira quase cheia!",
+                body: `A Lixeira ${name} está ${usedCapacity}% ocupada`,
+                sound:true,
+                priority: Notifications.AndroidNotificationPriority.HIGH,
+            }, 
+            trigger: null
+        });
+        await Notifications.cancelScheduledNotificationAsync(identifier);
+    }
+
+    useEffect(() => {
+
+        async function initAsyncStorage(){
+            await AsyncStorage.setItem(`${name}-alerted`, "false")
+            await AsyncStorage.setItem(`${name}-Warned`, "false")
+            let a = await AsyncStorage.getItem(`${name}-alerted`)
+            let b = await AsyncStorage.getItem(`${name}-Warned`)
+            console.log(a,b)
+        }
+        // initAsyncStorage();
+        setInterval( async () =>{
+            checkActivity();
+        }, 60000)
+    }, []);
 
     function updateActivity(updatedAt: string){
         const lastUpdate = new Date(updatedAt);
         lastUpdate.setHours(lastUpdate.getHours() - 3);
-        
         const now = new Date();
-
         const delta = now.getTime() - lastUpdate.getTime();
         const days = Math.round(delta/(1000*60*60*24));
         
-        if (days < 1){
-            let hours = Math.round(delta/(1000*60*60));
-            if(hours<1){
-                let minutes = Math.round(delta/(1000*60));
-                setActivity(minutes);
-                if ( minutes == 1){
-                    setTimeType('minuto');
-                }else{
-                    setTimeType('minutos');
-                }
-            }else{
-                setActivity(hours);
+        if (days || days == 0){
 
-                if(hours == 1){
-                    setTimeType('hora');
+            if (days < 1){
+                let hours = Math.round(delta/(1000*60*60));
+                if(hours<1){
+                    let minutes = Math.round(delta/(1000*60));
+                    setActivity(minutes);
+                    if ( minutes == 1){
+                        setTimeType('minuto');
+                    }else{
+                        setTimeType('minutos');
+                    }
                 }else{
-                    setTimeType('horas');
+                    setActivity(hours);
+    
+                    if(hours == 1){
+                        setTimeType('hora');
+                    }else{
+                        setTimeType('horas');
+                    }
                 }
-            }
-        }else{
-            setActivity(days);
-            if (days == 1) {
-                setTimeType('dia')
             }else{
-                setTimeType('dias')
+                setActivity(days);
+                if (days == 1) {
+                    setTimeType('dia')
+                }else{
+                    setTimeType('dias')
+                }
             }
         }
-
     }
 
     useEffect(() => {
@@ -91,14 +134,45 @@ export default function Container({
     async function checkActivity(){
         const token = await getToken();
         const container = await getContainer(id, token);
-        updateActivity(container.updatedAt)
+        
+        if (container) {
+            updateActivity(container.updatedAt);
+            setUsedCapacity(container.usedCapacity);
+            setCapacityState(container.capacityStatus);
+        
+            let hasAlerted = false;
+            try{
+                hasAlerted = await AsyncStorage.getItem(`${name}-alerted`) === "true";
+                console.log(hasAlerted)
+    
+            }catch(e){
+                console.error(e)
+            }
+    
+            let hasWarned = false;
+            try{
+                hasWarned = await AsyncStorage.getItem(`${name}-Warned`) === "true";
+                console.log(hasWarned)
+            }catch(e){
+                console.error(e)
+            }
+    
+            if(container.usedCapacity >= 60 && container.usedCapacity < 85 && !hasAlerted){
+                console.log('ABLUBER')
+                await pushNotification(container.usedCapacity);
+                await AsyncStorage.setItem(`${name}-alerted`, "true")
+            }else if(container.usedCapacity > 85 && !hasWarned){
+                await AsyncStorage.setItem(`${name}-Warned`, "true")
+                await pushNotification(container.usedCapacity);
+            }
+        }
     }
 
     return (
         <CardView>
             <View style={{width: '35%'}}>
                 <Image 
-                    source={switchImage[capacityStatus]} 
+                    source={switchImage[capacityState]} 
                     style={styles.trashImg}
                 />
             </View>
@@ -133,8 +207,8 @@ export default function Container({
                 </View>
 
                 <View style={styles.descriptionView}>
-                    <Text style={styles.descriptionText}>Capacidade Total: {totalCapacity}</Text>
-                    <Text style={styles.descriptionText}>Ocupação: {usedCapacity}%</Text>
+                    <Text style={styles.descriptionText}>Capacidade Total: {totalCapacity} litros</Text>
+                    <Text style={styles.descriptionText}>Ocupação: {usedCapacityState}%</Text>
                 </View> 
             </View>
         </CardView>

@@ -2,10 +2,10 @@ export type ContainerProps = {
     id: string,
     name:string,
     totalCapacity: string,
-    usedCapacity: string,
+    usedCapacity: number,
     capacityStatus: string,
     updatedAt: string;
-    location?: {
+    location: {
         cep: string;
         street: string;
         district: string;
