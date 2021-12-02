@@ -68,7 +68,6 @@ export default function Container({
             await AsyncStorage.setItem(`${name}-Warned`, "false")
             let a = await AsyncStorage.getItem(`${name}-alerted`)
             let b = await AsyncStorage.getItem(`${name}-Warned`)
-            console.log(a,b)
         }
         // initAsyncStorage();
         setInterval( async () =>{
@@ -143,7 +142,6 @@ export default function Container({
             let hasAlerted = false;
             try{
                 hasAlerted = await AsyncStorage.getItem(`${name}-alerted`) === "true";
-                console.log(hasAlerted)
     
             }catch(e){
                 console.error(e)
@@ -152,13 +150,11 @@ export default function Container({
             let hasWarned = false;
             try{
                 hasWarned = await AsyncStorage.getItem(`${name}-Warned`) === "true";
-                console.log(hasWarned)
             }catch(e){
                 console.error(e)
             }
     
             if(container.usedCapacity >= 60 && container.usedCapacity < 85 && !hasAlerted){
-                console.log('ABLUBER')
                 await pushNotification(container.usedCapacity);
                 await AsyncStorage.setItem(`${name}-alerted`, "true")
             }else if(container.usedCapacity > 85 && !hasWarned){

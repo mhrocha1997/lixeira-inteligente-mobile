@@ -1,7 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 
-import {Text, SafeAreaView, Image, View, StyleSheet, FlatList} from 'react-native';
+import {Text, SafeAreaView, Image, View, StyleSheet, FlatList, TouchableOpacity, Modal} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
+import Icon from "react-native-vector-icons/Feather";
+
 
 import UserContext from '../contexts/UserContext';
 import ProductsContext from '../contexts/ProductsContext';
@@ -12,9 +14,11 @@ import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 import { getUserData } from '../services/UserService'
+import ReadCodebar from './ReadBarcode';
 
 export default function Profile(){
     const [ userData, setUserData] = useState({} as UserData)
+    const[isModalVisible, setModalVisible] = useState(false);
 
     const {getToken, points, discardNumber} = useContext(UserContext);
     const { discards } = useContext(ProductsContext);
@@ -26,7 +30,15 @@ export default function Profile(){
             setUserData(data);
         }
         fetchUserData();
-    },[])
+    },[]);
+
+    function handleDiscard(){
+        setModalVisible(true);
+    }
+
+    const closeModal = useCallback(event => {
+        setModalVisible(false);
+    },[isModalVisible]);
 
     return (
         <SafeAreaView style={styles.screen}>
@@ -95,6 +107,38 @@ export default function Profile(){
                 />
                 ): undefined }
             </View>
+
+                    <TouchableOpacity
+                    style={{
+                      borderWidth: 1,
+                      borderColor: 'rgba(0,0,0,0.2)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 70,
+                      position: 'absolute',
+                      bottom: 10,
+                      right: 10,
+                      height: 70,
+                      backgroundColor: '#fff',
+                      borderRadius: 100,
+                    }}
+                    onPress={handleDiscard}
+                >
+                    <Icon name='plus' size={30} color='#01a699' />
+                </TouchableOpacity>
+                
+            <Modal
+                visible={isModalVisible}
+                animationType="slide"
+                transparent={false}
+                onRequestClose={() => {
+                    setModalVisible(!isModalVisible);
+                  }}
+            >
+                <ReadCodebar
+                    callbackFunction={closeModal}
+                />
+            </Modal>
             
         </SafeAreaView>
     )

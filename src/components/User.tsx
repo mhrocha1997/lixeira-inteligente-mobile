@@ -23,7 +23,8 @@ export default function User({
 }: UserData){
     const base64Image = `data:image/png;base64,${profileImage}`;
     return (
-        <CardView>
+        role !== 'ADMIN'
+        ?(<CardView>
             <View 
                 style={styles.profileView}
             >
@@ -48,7 +49,8 @@ export default function User({
                     </View>
                 </View>
             </View>
-        </CardView>
+        </CardView>)
+        : null
     );
 }
 
