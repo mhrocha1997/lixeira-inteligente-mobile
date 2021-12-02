@@ -28,27 +28,46 @@ export default function Routes() {
     
     let { isSigned, role } = useContext(UserContext);
 
+    role = 'USER';
+
     const commonTabs = (
-        <Tab.Screen
-            name="Catálogo"
-            component={Catalog}
-            options={{
-            tabBarLabel: () => null,
-            tabBarIcon: () => (
-                <Icon 
-                name="list" 
-                size={27} 
-                color="white" 
-                style={styles.icon} 
+        <>
+            <Tab.Screen
+                name="Catálogo"
+                component={Catalog}
+                options={{
+                tabBarLabel: () => null,
+                tabBarIcon: () => (
+                    <Icon 
+                    name="list" 
+                    size={27} 
+                    color="white" 
+                    style={styles.icon} 
+                    />
+                ),
+                }}
+            />
+            <Tab.Screen
+                    name="Controle de Lixeiras"
+                    component={ContainerControl}
+                    options={{
+                        tabBarLabel: () => null,
+                        tabBarIcon: () => (
+                        <Icon 
+                            name='trash-2' 
+                            size={27} 
+                            color="white" 
+                            style={styles.icon}
+                        />
+                        )
+                    }}
                 />
-            ),
-            }}
-        />
+        </>
     )
 
     const userTabs = (
             <>
-                <Tab.Screen
+                {/* <Tab.Screen
                 name="Novo Descarte"
                 component={ReadBarcode}
                 options={{
@@ -62,7 +81,7 @@ export default function Routes() {
                     />
                     ),
                 }}
-                />
+                /> */}
                 <Tab.Screen
                 name="Perfil"
                 component={Profile}
@@ -78,21 +97,7 @@ export default function Routes() {
 
     const adminTabs = (
         <>
-            <Tab.Screen
-                name="Controle de Lixeiras"
-                component={ContainerControl}
-                options={{
-                    tabBarLabel: () => null,
-                    tabBarIcon: () => (
-                    <Icon 
-                        name='trash-2' 
-                        size={27} 
-                        color="white" 
-                        style={styles.icon}
-                    />
-                    )
-                }}
-            />
+            
             <Tab.Screen
                 name="Controle de Usuários"
                 component={UserControl}

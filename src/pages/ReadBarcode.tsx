@@ -9,7 +9,7 @@ import { getProductByCode } from "../services/ProductService";
 import { addDiscard } from "../services/InventoryService";
 import ProductsContext from "../contexts/ProductsContext";
 
-export default function ReadCodebar() {
+export default function ReadCodebar({callbackFunction}: any) {
 	const [hasPermission, setHasPermission] = useState(true);
 	const [isScanned, setIsScanned] = useState(false);
 

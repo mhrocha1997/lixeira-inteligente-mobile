@@ -33,7 +33,7 @@ export const UserProvider = ({ children }: Children) => {
 
 	useEffect(() => {
 		async function authenticate() {
-            setReloadUserInfo(false);
+            // setReloadUserInfo(false);
             readToken();
             
 		}
