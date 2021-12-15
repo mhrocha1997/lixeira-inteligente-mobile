@@ -12,6 +12,7 @@ import profile from '../assets/profile.png';
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
 import { UserData } from '../types/UserProps';
+import base64 from '../utils/base64';
 
 export default function User({
     name,
@@ -21,7 +22,11 @@ export default function User({
     id,
     profileImage
 }: UserData){
-    const base64Image = `data:image/png;base64,${profileImage}`;
+    const base64Image = 
+        profileImage ?
+            base64.useBase64(profileImage)
+        : null
+
     return (
         role !== 'ADMIN'
         ?(<CardView>

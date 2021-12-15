@@ -65,7 +65,7 @@ export default function ReadCodebar({callbackFunction}: any) {
                                 setIsScanned(false);
                                 handleDiscardSucceeded();
                                 handleUserInfoUpdate();
-                                navigation.navigate("Perfil");
+                                callbackFunction();
                             },
                         },
                     ]);
