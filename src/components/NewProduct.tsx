@@ -44,9 +44,9 @@ export default function NewProduct({callbackFunction}: any){
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
+            allowsEditing: false,
             aspect: [4, 3],
-            quality: 0.3,
+            quality: 0.1,
         });
 
         if (!result.cancelled) {

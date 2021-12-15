@@ -58,7 +58,11 @@ export default function Register({navigation} : any){
     }
 
     function handleChangeName(name: string){
-        setName({value: name, error: ''});
+        if (Validator.validateName(name)){
+            setName({value: name, error: ''});
+        }else{
+            setName({value: name, error: 'Digite um nome válido!'});
+        }
     }
 
     function handleChangeEmail(email: string){

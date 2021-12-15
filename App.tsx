@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, LogBox } from 'react-native';
 
 import { 
     Roboto_700Bold,
@@ -17,6 +17,8 @@ export default function App() {
     Roboto_700Bold,
     UbuntuCondensed_400Regular,
   });
+
+//   LogBox.ignoreAllLogs();
 
   return (
     <UserProvider>

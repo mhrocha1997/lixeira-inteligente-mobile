@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { Children, ReactNode } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -7,10 +7,10 @@ type Children = {
     children: ReactNode;
   };
 
-export default function CardView({children}: Children){
+export default function CardView({children, style}: any){
     return (
         <View style={styles.centeredView}>
-            <View style={styles.cardView}>
+            <View style={{...styles.cardView, ...style}}>
                 {children}
             </View>
         </View>
